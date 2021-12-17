@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .removeTitle()
             .changeTintColor(to: .red)
         window.backgroundColor = UIColor.white
-        window.rootViewController = vc
+        window.rootViewController = TabBarController()
         window.makeKeyAndVisible()
         self.window = window
     }

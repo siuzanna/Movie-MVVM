@@ -1,27 +1,27 @@
 
 # MARK: - Colors
 
-# xcassets:
-#   inputs: Movie/Resources/Colors.xcassets
-#   outputs:
-#     templateName: swift5
-#     params:
-#       forceProvidesNamespaces: true
-#       enumName: Colors
-#     output: Movie/Resources/GeneratedColors.swift
+ xcassets:
+   inputs: Movie/Resources/Colors.xcassets
+   outputs:
+     templateName: swift5
+     params:
+       forceProvidesNamespaces: true
+       enumName: Colors
+     output: Movie/Resources/GeneratedColors.swift
 
 
 
 # MARK: - Icons
 
- xcassets:
-    inputs: Movie/Resources/Icons.xcassets
-    outputs:
-        templateName: swift5
-        params:
-            forceProvidesNamespaces: true
-            enumName: Icons
-        output: Movie/Resources/GeneratedIcons.swift
+# xcassets:
+#    inputs: Movie/Resources/Icons.xcassets
+#    outputs:
+#        templateName: swift5
+#        params:
+#            forceProvidesNamespaces: true
+#            enumName: Icons
+#        output: Movie/Resources/GeneratedIcons.swift
 
 
 # Pods/SwiftGen/bin/swiftgen -- runs the pod
