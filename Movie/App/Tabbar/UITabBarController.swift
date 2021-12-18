@@ -59,13 +59,13 @@ enum TabBar: String, CaseIterable {
         var vc = UINavigationController()
         switch self {
             case .home:
-                vc = UINavigationController(rootViewController: ViewController())
+                vc = UINavigationController(rootViewController: MainScreenViewController())
             case .explore:
-                vc = UINavigationController(rootViewController: ViewController())
+                vc = UINavigationController(rootViewController: UIViewController())
             case .bookmark:
-                vc = UINavigationController(rootViewController: ViewController())
+                vc = UINavigationController(rootViewController: UIViewController())
             case .user:
-                vc = UINavigationController(rootViewController: ViewController())
+                vc = UINavigationController(rootViewController: UIViewController())
         }
         
         vc.setNavigationBarHidden(true, animated: true)

@@ -23,6 +23,7 @@ internal enum Colors {
   internal static let icon2 = ColorAsset(name: "icon2")
   internal static let icons = ColorAsset(name: "icons")
   internal static let logoRed = ColorAsset(name: "logoRed")
+  internal static let statusBar = ColorAsset(name: "statusBar")
   internal static let tabbar = ColorAsset(name: "tabbar")
   internal static let title = ColorAsset(name: "title")
 }

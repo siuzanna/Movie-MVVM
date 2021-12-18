@@ -17,23 +17,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="launchPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="3PA-Oc-78A">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchPhoto" translatesAutoresizingMaskIntoConstraints="NO" id="3PA-Oc-78A">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="wGk-7d-3qG">
                                 <rect key="frame" x="103" y="370" width="208" height="156"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="208" id="GmS-em-oap"/>
-                                    <constraint firstAttribute="height" constant="156" id="x4m-eJ-ND8"/>
+                                    <constraint firstAttribute="width" constant="208" id="KwM-Qg-r0C"/>
+                                    <constraint firstAttribute="height" constant="156" id="s4s-c6-3Bp"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="wGk-7d-3qG" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="JAH-so-yxX"/>
-                            <constraint firstItem="wGk-7d-3qG" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="spm-ak-7dm"/>
+                            <constraint firstItem="3PA-Oc-78A" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="8W5-K4-mno"/>
+                            <constraint firstItem="3PA-Oc-78A" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="9Jk-gy-fBp"/>
+                            <constraint firstItem="3PA-Oc-78A" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="EKy-SG-C1J"/>
+                            <constraint firstAttribute="trailing" secondItem="3PA-Oc-78A" secondAttribute="trailing" id="Ukg-j9-M4G"/>
+                            <constraint firstItem="wGk-7d-3qG" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Y18-sp-41s"/>
+                            <constraint firstAttribute="bottom" secondItem="3PA-Oc-78A" secondAttribute="bottom" id="q9A-ud-F90"/>
+                            <constraint firstItem="wGk-7d-3qG" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qMf-sS-Zuf"/>
+                            <constraint firstItem="3PA-Oc-78A" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="s8o-ch-lGQ"/>
                         </constraints>
                     </view>
                 </viewController>
