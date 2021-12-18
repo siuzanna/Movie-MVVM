@@ -8,17 +8,17 @@
 import Foundation
 
 class NetworkService {
-    
+
     private let urlSession: URLSession
-    
+
     required init(session: URLSession = URLSession.shared) {
         urlSession = session
     }
-     
+
     func sendRequest<SuccessModel: Codable>(
         urlRequest: URLRequest,
         successModel: SuccessModel.Type,
-        completion: @escaping (ProResult<SuccessModel>) -> ()
+        completion: @escaping (ProResult<SuccessModel>) -> Void
     ) {
         urlSession.dataTask(with: urlRequest) { [weak self] data, response, error in
             guard let self = self else {
@@ -42,7 +42,7 @@ class NetworkService {
             }
         }.resume()
     }
-    
+
     private func validateErrors(data: Data?, response: URLResponse?, error: Error?) -> Error? {
         if let error = error {
             return error
@@ -51,7 +51,7 @@ class NetworkService {
             return URLError(.badServerResponse)
         }
         switch statusCode {
-        case StatusCode.ok.rawValue:
+        case StatusCode.okey.rawValue:
             return nil
         case StatusCode.badRequest.rawValue:
             return NetworkErrors.badRequest
@@ -60,7 +60,7 @@ class NetworkService {
         }
         return nil
     }
-    
+
     private func transformFromJSON<Model: Codable>(
         data: Data?,
         objectType: Model.Type

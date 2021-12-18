@@ -18,4 +18,4 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return img!
     }
-} 
+}

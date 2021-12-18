@@ -13,7 +13,6 @@ enum ProResult<Success> {
     case failure(String)
 }
 
-
 struct FailureModel: Codable {
     let statusCode: Int?
     let errors: [String]?

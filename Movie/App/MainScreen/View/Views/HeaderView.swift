@@ -8,7 +8,7 @@
 import UIKit
 
 class HeaderView: UICollectionReusableView {
-        
+
     let label: UILabel = {
         let text = UILabel()
         text.textColor = .white
@@ -16,7 +16,7 @@ class HeaderView: UICollectionReusableView {
         text.numberOfLines = 0
         return text
     }()
-    
+
     let buttonLable: UILabel = {
         let text = UILabel()
         text.text = "See All >"
@@ -24,12 +24,12 @@ class HeaderView: UICollectionReusableView {
         text.font = UIFont.systemFont(ofSize: 15)
         return text
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
     }
-    
+
     func configure() {
         addSubview(label)
         addSubview(buttonLable)
@@ -42,10 +42,8 @@ class HeaderView: UICollectionReusableView {
             make.trailing.equalToSuperview().inset(16)
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
 }
-
-
