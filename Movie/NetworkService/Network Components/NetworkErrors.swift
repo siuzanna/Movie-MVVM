@@ -13,6 +13,6 @@ enum NetworkErrors: Error {
 }
 
 enum StatusCode: Int {
-    case ok = 200
+    case okey = 200
     case badRequest = 400
 }

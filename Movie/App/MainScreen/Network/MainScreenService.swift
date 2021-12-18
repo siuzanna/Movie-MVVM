@@ -8,13 +8,13 @@
 import Foundation
 
 protocol MainScreenServiceProtocol {
-    func getMenu(completion: @escaping (_ success: Bool, _ results: [Movies]?, _ error: String?) -> ())
+    func getMenu(completion: @escaping (_ success: Bool, _ results: [Movies]?, _ error: String?) -> Void)
 }
 
 class MainScreenService: MainScreenServiceProtocol {
     let networkService: NetworkService = NetworkService()
- 
-    func getMenu(completion: @escaping (Bool, [Movies]?, String?) -> ()) {
+
+    func getMenu(completion: @escaping (Bool, [Movies]?, String?) -> Void) {
         networkService.sendRequest(
             urlRequest: MainScreenRouter.getAllPosts.createURLRequest(),
             successModel: [Movies].self
@@ -25,10 +25,9 @@ class MainScreenService: MainScreenServiceProtocol {
                     completion(true, model, nil)
                 case .badRequest(let error):
                     print(error)
-                case .failure(_):
-                    print("Failed11б \(result)")
+                case .failure(let error):
+                    print("Failed11б \(error)")
             }
         }
     }
 }
- 

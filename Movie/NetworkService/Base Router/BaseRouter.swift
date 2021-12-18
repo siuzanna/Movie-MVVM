@@ -21,7 +21,7 @@ protocol BaseRouter {
 }
 
 extension BaseRouter {
-    
+
     var scheme: String {
         return "https"
     }
@@ -29,7 +29,7 @@ extension BaseRouter {
     var host: String {
         return "run.mocky.io"
     }
-    
+
     func createURLRequest() -> URLRequest {
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
@@ -47,8 +47,7 @@ extension BaseRouter {
         }
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-  
+
         return urlRequest
     }
 }
-
