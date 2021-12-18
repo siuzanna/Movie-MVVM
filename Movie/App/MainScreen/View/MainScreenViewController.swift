@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainScreenViewController.swift
 //  Movie
 //
 //  Created by siuzanna on 17/12/21.
@@ -7,15 +7,13 @@
 
 import UIKit
 
-class ViewController: UIViewController, UICollectionViewDelegate {
+class MainScreenViewController: UIViewController, UICollectionViewDelegate {
     
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     private var collectionView: UICollectionView! = nil
-    
-    private lazy var menuViewModel = {
-        PhotoViewModel()
-    }()
+    private lazy var navigationBar = { NavigationBar() }()
+    private lazy var menuViewModel = { MainScreenViewModel() }()
     
     enum Section: String, CaseIterable {
         case topSlide = ""
@@ -26,108 +24,74 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     }
     
     enum Item: Hashable {
-        case topSlide(PhotoCellViewModel)
-        case mostPopular(PhotoCellViewModel)
-        case comingSoon(PhotoCellViewModel)
-        case lastUpdate(PhotoCellViewModel)
-        case bestSeries(PhotoCellViewModel)
+        case topSlide(MainScreenCellViewModel)
+        case mostPopular(MainScreenCellViewModel)
+        case comingSoon(MainScreenCellViewModel)
+        case lastUpdate(MainScreenCellViewModel)
+        case bestSeries(MainScreenCellViewModel)
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Colors.bg.color
-        self.configureCollectionView()
+        view.addSubview(navigationBar)
+        setupNavigationBar()
         initViewModel()
-        self.configureDataSource()
     }
     
-    func initViewModel() {
+    private func initViewModel() {
         menuViewModel.getMenu()
         
         menuViewModel.reloadDataSource = { [weak self] in
             DispatchQueue.main.async {
+                self?.configureCollectionView()
                 self?.configureDataSource()
+                self?.setupCollectionViewConstraints()
             }
         }
     }
 }
 
-extension ViewController {
+// MARK: Configure Constraints
+extension MainScreenViewController {
+    private func setupCollectionViewConstraints() {
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(85)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+    private func setupNavigationBar() {
+        navigationBar.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(92)
+        }
+    }
+}
+
+// MARK: Configure UICollectionView
+extension MainScreenViewController {
     
     func configureCollectionView() {
-        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: generateLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
         view.addSubview(collectionView)
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.contentInset.top = 92
+        collectionView.contentInset.bottom = 20
+        collectionView.contentInset.top = 20
         collectionView.register(cell: PhotoCell.self)
+        collectionView.register(cell: TopCell.self)
         collectionView.register(header: HeaderView.self)
-        collectionView.contentInset.bottom = 56
         self.collectionView = collectionView
     }
-    
-    func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource
-        <Section, Item>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
-            switch item {
-                case .topSlide(let photo):
-                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                    cell.cellViewModel = photo
-                    return cell
-                case .mostPopular(let photo):
-                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                    cell.cellViewModel = photo
-                    return cell
-                case .comingSoon(let photo):
-                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                    cell.cellViewModel = photo
-                    return cell
-                case .lastUpdate(let photo):
-                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                    cell.cellViewModel = photo
-                    return cell
-                case .bestSeries(let photo):
-                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                    cell.cellViewModel = photo
-                    return cell
-            }
-        }
-        
-        dataSource.supplementaryViewProvider = { (
-            collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
-            let sectionType = Section.allCases[indexPath.section]
-            switch sectionType {
-                case .topSlide:
-                    let supplementaryView: UICollectionReusableView = collectionView.dequeue(for: indexPath, kind: kind)
-                    return supplementaryView
-                case .mostPopular:
-                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
-                    return supplementaryView
-                case .comingSoon:
-                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
-                    supplementaryView.buttonLable.text = ""
-                    return supplementaryView
-                case .lastUpdate:
-                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
-                    return supplementaryView
-                case .bestSeries:
-                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
-                    return supplementaryView
-            }
-        }
-        
-        let snapshot = snapshot()
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
+}
+
+// MARK: UICollectionViewLayout
+extension MainScreenViewController {
     
     func generateLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
@@ -201,13 +165,11 @@ extension ViewController {
             widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4)
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.91),
+            widthDimension: .fractionalWidth(1),
             heightDimension: .fractionalWidth(0.426))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
         
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -220,24 +182,85 @@ extension ViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = UICollectionLayoutSectionOrthogonalScrollingBehavior.continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        
         section.boundarySupplementaryItems = [sectionHeader]
-        section.orthogonalScrollingBehavior = .continuous
+        section.orthogonalScrollingBehavior = .none
         
         return section
     }
+}
+
+// MARK: UICollectionViewDiffableDataSource
+extension MainScreenViewController {
     
+    func configureDataSource() {
+        dataSource = UICollectionViewDiffableDataSource
+        <Section, Item>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
+            switch item {
+                case .topSlide(let photo):
+                    let cell: TopCell = collectionView.dequeue(for: indexPath)
+                    cell.cellViewModel = photo
+                    return cell
+                case .mostPopular(let photo):
+                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
+                    cell.cellViewModel = photo
+                    return cell
+                case .comingSoon(let photo):
+                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
+                    cell.cellViewModel = photo
+                    return cell
+                case .lastUpdate(let photo):
+                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
+                    cell.cellViewModel = photo
+                    return cell
+                case .bestSeries(let photo):
+                    let cell: PhotoCell = collectionView.dequeue(for: indexPath)
+                    cell.cellViewModel = photo
+                    return cell
+            }
+        }
+        
+        dataSource.supplementaryViewProvider = { (
+            collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            let sectionType = Section.allCases[indexPath.section]
+            switch sectionType {
+                case .topSlide:
+                    let supplementaryView: UICollectionReusableView = collectionView.dequeue(for: indexPath, kind: kind)
+                    return supplementaryView
+                case .mostPopular:
+                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
+                    return supplementaryView
+                case .comingSoon:
+                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
+                    supplementaryView.buttonLable.text = ""
+                    return supplementaryView
+                case .lastUpdate:
+                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
+                    return supplementaryView
+                case .bestSeries:
+                    let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                    supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
+                    return supplementaryView
+            }
+        }
+        
+        let snapshot = snapshot()
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
     
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
-        
         snapshot.appendSections([.topSlide, .mostPopular, .comingSoon, .lastUpdate, .bestSeries])
-        snapshot.appendItems(menuViewModel.menuCellViewModel.map({ Item.topSlide($0) }), toSection: .topSlide)
-        snapshot.appendItems(menuViewModel.menuCellViewModel.map({ Item.mostPopular($0) }), toSection: .mostPopular)
-        snapshot.appendItems(menuViewModel.menuCellViewModel.map({ Item.comingSoon($0) }), toSection: .comingSoon)
-        snapshot.appendItems(menuViewModel.menuCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
-        snapshot.appendItems(menuViewModel.menuCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
+        snapshot.appendItems(menuViewModel.topCellViewModel.map({ Item.topSlide($0) }), toSection: .topSlide)
+        snapshot.appendItems(menuViewModel.popularCellViewModel.map({ Item.mostPopular($0) }), toSection: .mostPopular)
+        snapshot.appendItems(menuViewModel.comingSoonCellViewModel.map({ Item.comingSoon($0) }).suffix(1), toSection: .comingSoon)
+        snapshot.appendItems(menuViewModel.lastUpdatedCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
+        snapshot.appendItems(menuViewModel.bestSeriesCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
         return snapshot
     }
 }
- 

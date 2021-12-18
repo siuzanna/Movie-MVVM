@@ -13,13 +13,16 @@ class PhotoCell: UICollectionViewCell {
     
     public lazy var imageView: UIImageView = {
         let image = UIImageView()
+        image.layer.masksToBounds = true
         image.clipsToBounds = true
+        image.layer.cornerRadius = 15
+        image.contentMode = .scaleAspectFill
         return image
     }()
     
-    var cellViewModel: PhotoCellViewModel? {
+    var cellViewModel: MainScreenCellViewModel? {
         didSet {
-            if let url = cellViewModel?.url  {
+            if let url = cellViewModel?.miniPhoto  {
                 self.imageView.sd_setImage(with: URL(string: url), placeholderImage: UIImage(), options: [.continueInBackground,.progressiveLoad], completed: nil)
             }
         }
@@ -27,8 +30,6 @@ class PhotoCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .red
-        layer.cornerRadius = 15
         configure()
     }
     
