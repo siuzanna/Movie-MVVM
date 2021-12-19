@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainScreenViewController: UIViewController, UICollectionViewDelegate {
+class MainScreenViewController: UIViewController {
 
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
@@ -94,8 +94,8 @@ extension MainScreenViewController {
 extension MainScreenViewController {
 
     func generateLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex: Int, _:
-                                                                NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout {
+            (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
 
             let sectionLayoutKind = Section.allCases[sectionIndex]
             switch sectionLayoutKind {
@@ -242,5 +242,26 @@ extension MainScreenViewController {
         snapshot.appendItems(menuViewModel.lastUpdatedCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
         snapshot.appendItems(menuViewModel.bestSeriesCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
         return snapshot
+    }
+}
+
+extension MainScreenViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let view = MovieDetailedScreenViewController()
+ 
+        switch Section.allCases[indexPath.section] {
+            case .topSlide:
+                view.viewViewModel = menuViewModel.topCellViewModel[indexPath.row]
+            case .mostPopular:
+                view.viewViewModel = menuViewModel.popularCellViewModel[indexPath.row]
+            case .comingSoon:
+                view.viewViewModel = menuViewModel.comingSoonCellViewModel[indexPath.row]
+            case .lastUpdate:
+                view.viewViewModel = menuViewModel.lastUpdatedCellViewModel[indexPath.row]
+            case .bestSeries:
+                view.viewViewModel = menuViewModel.bestSeriesCellViewModel[indexPath.row]
+        }
+        view.modalPresentationStyle = .overFullScreen
+        self.present(view, animated: true, completion: nil)
     }
 }
