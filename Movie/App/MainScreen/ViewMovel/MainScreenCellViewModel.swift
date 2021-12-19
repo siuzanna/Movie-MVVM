@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MainScreenCellViewModel: Hashable {
+struct MainScreenCellViewModel: Hashable, Equatable {
     let id : Int?
     let type : Int?
     let series : Bool?
@@ -20,5 +20,5 @@ struct MainScreenCellViewModel: Hashable {
     let miniPhoto : String?
     let description : String?
     let trailer : String?
-//    let comments : [Comments]?
+    let comments : [Comments]?
 }

@@ -7,23 +7,26 @@
 
 import Foundation
 
-struct Comments : Codable {
-	let name : String?
-	let comment : String?
-	let picture : String?
+struct Comments : Codable, Hashable {
+    let id : Int?
+    let name : String?
+    let comment : String?
+    let picture : String?
 
-	enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
 
-		case name = "name"
-		case comment = "comment"
-		case picture = "picture"
-	}
+        case id = "id"
+        case name = "name"
+        case comment = "comment"
+        case picture = "picture"
+    }
 
-	init(from decoder: Decoder) throws {
-		let values = try decoder.container(keyedBy: CodingKeys.self)
-		name = try values.decodeIfPresent(String.self, forKey: .name)
-		comment = try values.decodeIfPresent(String.self, forKey: .comment)
-		picture = try values.decodeIfPresent(String.self, forKey: .picture)
-	}
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decodeIfPresent(Int.self, forKey: .id)
+        name = try values.decodeIfPresent(String.self, forKey: .name)
+        comment = try values.decodeIfPresent(String.self, forKey: .comment)
+        picture = try values.decodeIfPresent(String.self, forKey: .picture)
+    }
 
 }

@@ -8,13 +8,13 @@
 import Foundation
 
 class MainScreenViewModel: NSObject {
-
+    
     private var menuService: MainScreenServiceProtocol
-
+    
     var reloadDataSource: (() -> Void)?
-
+    
     var movie = [Movies]()
-
+    
     var menuCellViewModel = [MainScreenCellViewModel]() {
         didSet {
             reloadDataSource?()
@@ -26,11 +26,11 @@ class MainScreenViewModel: NSObject {
     var comingSoonCellViewModel = [MainScreenCellViewModel]()
     var lastUpdatedCellViewModel = [MainScreenCellViewModel]()
     var bestSeriesCellViewModel = [MainScreenCellViewModel]()
-
+    
     init(menuService: MainScreenServiceProtocol = MainScreenService()) {
         self.menuService = menuService
     }
-
+    
     func getMenu() {
         menuService.getMenu { success, model, error in
             if success, let movies = model {
@@ -55,7 +55,7 @@ class MainScreenViewModel: NSObject {
             }
         }
     }
-
+    
     func createCellModel(movie: Movies) -> MainScreenCellViewModel {
         let id = movie.id
         let type = movie.type
@@ -69,7 +69,7 @@ class MainScreenViewModel: NSObject {
         let miniPhoto = movie.miniPhoto
         let description = movie.description
         let trailer = movie.trailer
-//        let comments = movie.comments
+        let comments = movie.comments
         return MainScreenCellViewModel(
             id: id,
             type: type,
@@ -82,7 +82,11 @@ class MainScreenViewModel: NSObject {
             photo: photo,
             miniPhoto: miniPhoto,
             description: description,
-            trailer: trailer)
+            trailer: trailer,
+            comments: comments)
     }
-
+    
+    func getbyIndexPath(_ indexPath: IndexPath) -> MainScreenCellViewModel {
+        return menuCellViewModel[indexPath.row]
+    }
 }
