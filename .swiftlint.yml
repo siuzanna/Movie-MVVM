@@ -9,3 +9,5 @@ disabled_rules:
   - redundant_string_enum_value
   - closure_parameter_position
 line_length: 140
+
+#$ swiftlint autocorrect

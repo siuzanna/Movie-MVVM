@@ -20,6 +20,12 @@ class MainScreenViewModel: NSObject {
             reloadDataSource?()
         }
     }
+    
+    var topCellViewModel = [MainScreenCellViewModel]()
+    var popularCellViewModel = [MainScreenCellViewModel]()
+    var comingSoonCellViewModel = [MainScreenCellViewModel]()
+    var lastUpdatedCellViewModel = [MainScreenCellViewModel]()
+    var bestSeriesCellViewModel = [MainScreenCellViewModel]()
 
     init(menuService: MainScreenServiceProtocol = MainScreenService()) {
         self.menuService = menuService
@@ -79,9 +85,4 @@ class MainScreenViewModel: NSObject {
             trailer: trailer)
     }
 
-    var topCellViewModel = [MainScreenCellViewModel]()
-    var popularCellViewModel = [MainScreenCellViewModel]()
-    var comingSoonCellViewModel = [MainScreenCellViewModel]()
-    var lastUpdatedCellViewModel = [MainScreenCellViewModel]()
-    var bestSeriesCellViewModel = [MainScreenCellViewModel]()
 }
