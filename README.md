@@ -1,6 +1,6 @@
 # Movie
 
-App shows you collections of TV streaming and other movies. Movies app written in Swift 5 using the [Custom API](https://www.mocky.io/v3/c61290f1-3440-49ad-b778-d0876d3de376) created on the Mocky website. App built using the MVVM architecture and 100% programmatic UI (No Storyboard).
+App shows you collections of TV streaming and other movies. Movies app written in Swift & UIKit using the [Custom API](https://www.mocky.io/v3/c61290f1-3440-49ad-b778-d0876d3de376) created on the Mocky website. App built using the MVVM architecture and 100% programmatic UI (No Storyboard).
 
 ### Screen Shots
 ![Group1X](https://user-images.githubusercontent.com/64474454/146820234-84c70414-719a-4471-9513-8cc813a14bbe.png)
