@@ -261,7 +261,7 @@ extension MainScreenViewController: UICollectionViewDelegate {
             case .bestSeries:
                 view.viewViewModel = menuViewModel.bestSeriesCellViewModel[indexPath.row]
         }
-        view.modalPresentationStyle = .overFullScreen
+        view.modalPresentationStyle = .overCurrentContext
         self.present(view, animated: true, completion: nil)
     }
 }
