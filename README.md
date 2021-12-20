@@ -10,8 +10,8 @@ App shows you collections of TV streaming and other movies. Movie app written in
 
 - [Description](#description)
 - [Dependencies](#dependencies)
-- [How To Use](#how-to-use)
 - [Resources](#resources)
+- [How To Use](#how-to-use)
 - [Author Info](#author-info)
 
 ---
