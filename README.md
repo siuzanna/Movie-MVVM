@@ -23,12 +23,12 @@ App shows you collections of TV streaming and other movies. Movies app written i
 - [X] App built using the MVVM architecture.
 - [X] This app includes descriptions for each movie as well as trailers and the movie’s rating.
 - [X] Movie also contains movies that are from paid apps such as Netflix.
-- [X] It also features the best movies that refresh weekly so you can choose and watch the latest movies that have the best ratings.
 - [X] User can view movie details by tapping on a cell.
 - [x] All images are cached uising SDWebImage cocoapod.
 - [X] Movie details page contain backdrop and poster image, overview, duration and other relevant information.
 - [X] User can view trailer of a particular movie in the youtube app or a web browser.
- 
+- [X] It also features the best movies that refresh weekly so you can choose and watch the latest movies that have the best ratings.
+
 ### Todo
 
 - [ ] Refresh API data - trailer ulr, description, comments, rating for each movie.
