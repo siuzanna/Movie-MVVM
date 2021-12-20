@@ -12,10 +12,9 @@ class LableImage: UIView {
     private lazy var imageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
-        image.image = Icons.photo.image
         return image
     }()
-     
+    
     private lazy var nameLabel: UILabel = {
         let text = UILabel()
         text.textColor = Colors.title.color
@@ -28,7 +27,7 @@ class LableImage: UIView {
         super.init(frame: frame)
         configure()
     }
-
+    
     private func configure() {
         addSubview(imageView)
         addSubview(nameLabel)
@@ -48,7 +47,7 @@ class LableImage: UIView {
         imageView.image = image
         imageView.tintColor = imageColor
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

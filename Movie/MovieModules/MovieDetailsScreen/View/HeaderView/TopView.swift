@@ -29,6 +29,7 @@ class TopView: UICollectionReusableView {
         image.layer.masksToBounds = true
         image.clipsToBounds = true
         image.layer.cornerRadius = 15
+        image.contentMode = .scaleAspectFill
         return image
     }()
     

@@ -1,14 +1,14 @@
 
 # MARK: - Colors
 
- xcassets:
-   inputs: Movie/Resources/Colors.xcassets
-   outputs:
-     templateName: swift5
-     params:
-       forceProvidesNamespaces: true
-       enumName: Colors
-     output: Movie/Resources/GeneratedColors.swift
+# xcassets:
+#   inputs: Movie/Resources/Colors.xcassets
+#   outputs:
+#     templateName: swift5
+#     params:
+#       forceProvidesNamespaces: true
+#       enumName: Colors
+#     output: Movie/Resources/GeneratedColors.swift
 
 
 
