@@ -33,8 +33,6 @@ internal enum Icons {
   internal static let gradient = ImageAsset(name: "gradient")
   internal static let launchPhoto = ImageAsset(name: "launchPhoto")
   internal static let logo = ImageAsset(name: "logo")
-  internal static let photo = ImageAsset(name: "photo")
-  internal static let poster = ImageAsset(name: "poster")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 
