@@ -36,6 +36,22 @@ class CommentsCell: UICollectionViewCell {
         return text
     }()
     
+    private lazy var thumbsupButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.tintColor = Colors.title.color
+        button.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
+        return button
+    }()
+
+    private lazy var thumbsdownButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.tintColor = Colors.title.color
+        button.setImage(UIImage(systemName: "hand.thumbsdown"), for: .normal)
+        return button
+    }()
+    
     let seperatorView = UIView()
     
     let containerView = UIView()
@@ -57,6 +73,8 @@ class CommentsCell: UICollectionViewCell {
         containerView.addSubview(commentLabel)
         containerView.addSubview(pictureView)
         containerView.addSubview(seperatorView)
+        containerView.addSubview(thumbsupButton)
+        containerView.addSubview(thumbsdownButton)
         contentView.addSubview(containerView)
         seperatorView.backgroundColor = .lightGray
         
@@ -72,6 +90,14 @@ class CommentsCell: UICollectionViewCell {
         }
         nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(pictureView.snp.trailing).offset(10)
+            make.centerY.equalTo(pictureView)
+        }
+        thumbsupButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(10)
+            make.centerY.equalTo(pictureView)
+        }
+        thumbsdownButton.snp.makeConstraints { make in
+            make.trailing.equalTo(thumbsupButton.snp.leading).inset(-10)
             make.centerY.equalTo(pictureView)
         }
         commentLabel.snp.makeConstraints { make in
