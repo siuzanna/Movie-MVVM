@@ -1,6 +1,6 @@
 # Movie        [![wakatime](https://wakatime.com/badge/github/siuzanna/Movie.svg)](https://wakatime.com/badge/github/siuzanna/Movie)
 
-App shows you collections of TV streaming and other movies. Movie app written in Swift & UIKit using the [Custom API](https://www.mocky.io/v3/c61290f1-3440-49ad-b778-d0876d3de376) created on the Mocky website. App built using the MVVM architecture and 100% programmatic UI (No Storyboard).
+App shows you collections of TV streaming and other movies. Movie app written in Swift & UIKit using the [Custom API](https://www.mocky.io/v3/3feccf06-6bc1-480d-97af-bbc05d785f86) created on the Mocky website. App built using the MVVM architecture and 100% programmatic UI (No Storyboard).
 
 ### Screen Shots
 ![Group1X](https://user-images.githubusercontent.com/64474454/146820234-84c70414-719a-4471-9513-8cc813a14bbe.png)
@@ -11,6 +11,7 @@ App shows you collections of TV streaming and other movies. Movie app written in
 - [Description](#description)
 - [Dependencies](#dependencies)
 - [How To Use](#how-to-use)
+- [Resources](#resources)
 - [Author Info](#author-info)
 
 ---
@@ -45,7 +46,12 @@ App shows you collections of TV streaming and other movies. Movie app written in
 
 - UIKit
 - WebKit 
+  
+## Resources
  
+- Design - [Figma design](https://www.figma.com/community/file/988093088740037911/VOD-Platform-App) created by [Mehri Fekri](https://www.figma.com/community/file/988093088740037911/VOD-Platform-App)
+- API - [Link to Mocky](https://www.mocky.io/v3/3feccf06-6bc1-480d-97af-bbc05d785f86)
+
 ## How To Use
 
 - Clone the project and run it on Xcode 12 or above.
