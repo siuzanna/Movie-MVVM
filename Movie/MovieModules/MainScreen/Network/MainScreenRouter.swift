@@ -13,7 +13,7 @@ enum MainScreenRouter: BaseRouter {
     var path: String {
         switch self {
         case .getAllPosts:
-            return "/v3/c61290f1-3440-49ad-b778-d0876d3de376"
+            return "/v3/3feccf06-6bc1-480d-97af-bbc05d785f86"
         }
     }
 
