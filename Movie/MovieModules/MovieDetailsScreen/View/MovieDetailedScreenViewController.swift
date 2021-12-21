@@ -209,8 +209,6 @@ extension MovieDetailedScreenViewController {
         snapshot.appendSections([.comments, .recommend])
         if let comments = viewViewModel?.comments {
             snapshot.appendItems(comments.map({ Item.recommend($0) }), toSection: .recommend)
-        }
-        if let comments = viewViewModel?.comments {
             snapshot.appendItems(comments.map({ Item.comments($0) }).suffix(0), toSection: .comments)
         }
         return snapshot

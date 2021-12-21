@@ -157,9 +157,9 @@ class TopView: UICollectionReusableView {
                let genres = cellViewModel?.genre,
                let stars = cellViewModel?.rating,
                let votes = cellViewModel?.votes {
-                let hours = time / 60; let minuts = time / 360
-                self.timeLabel.text = "\(hours) hour \(minuts) minute(s)"
+
                 self.nameLabel.text = name
+                self.timeLabel.text = "\(time / 60) hour \(time / 360) minute(s)"
                 self.descriptionLabel.text = description
                 var string = ""
                 for genre in genres {

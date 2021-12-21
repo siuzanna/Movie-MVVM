@@ -13,14 +13,13 @@ class SectionBackgroundDecorationView: UICollectionReusableView {
         super.init(frame: frame)
         configure()
     }
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-}
-
-extension SectionBackgroundDecorationView {
+    
     func configure() {
         backgroundColor = Colors.commetsView.color
         layer.cornerRadius = 12
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
     }
 }
