@@ -16,4 +16,4 @@ jobs:
         uses: jgehrcke/github-repo-stats@v1.1.0
         with: 
           repository: https://github.com/siuzanna/Movie 
-          ghtoken: ${{ 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 }}
+          ghtoken: ${{ secrets.ghrs_github_api_token }}
