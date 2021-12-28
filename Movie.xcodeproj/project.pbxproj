@@ -383,7 +383,7 @@
 			buildConfigurationList = 964938BD276CA666009C6708 /* Build configuration list for PBXNativeTarget "Movie" */;
 			buildPhases = (
 				CB717DB6C6645DE9C374C0C7 /* [CP] Check Pods Manifest.lock */,
-				96290F0C276E8AC500AFD992 /* ShellScript */,
+				96290F0C276E8AC500AFD992 /* SwiftLint */,
 				964938A5276CA661009C6708 /* Sources */,
 				964938A6276CA661009C6708 /* Frameworks */,
 				964938A7276CA661009C6708 /* Resources */,
@@ -465,20 +465,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Movie/Pods-Movie-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		96290F0C276E8AC500AFD992 /* ShellScript */ = {
+		96290F0C276E8AC500AFD992 /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
 			);
 			inputPaths = (
 			);
+			name = SwiftLint;
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
