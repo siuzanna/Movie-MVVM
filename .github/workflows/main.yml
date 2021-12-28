@@ -1,0 +1,19 @@
+name: data-repo
+on:
+  schedule:
+    # Run this once per day.
+    # The specific hour is interpreted in UTC time zone.
+    # Do this towards the end of the UTC day.
+    - cron: "0 23 * * *"
+  workflow_dispatch: # Allow for running this manually.
+
+jobs:
+  j1:
+    name: github-repo-stats
+    runs-on: ubuntu-latest
+    steps:
+      - name: run-ghrs
+        uses: jgehrcke/github-repo-stats@v1.1.0
+        with: 
+          repository: https://github.com/siuzanna/Movie 
+          ghtoken: ${{ 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 }}
