@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1F7FCF069F29EAD90829EC77 /* Pods_Movie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D69698E83CFDFC9C1B27BC /* Pods_Movie.framework */; };
-		96290EDB276D0E6D00AFD992 /* MainScreenCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96290EDA276D0E6D00AFD992 /* MainScreenCellViewModel.swift */; };
 		96290EDE276D0F2E00AFD992 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96290EDD276D0F2E00AFD992 /* PhotoCell.swift */; };
 		96290EE0276D117700AFD992 /* UICollectionViewCell+Register+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96290EDF276D117700AFD992 /* UICollectionViewCell+Register+extension.swift */; };
 		96290EE2276D130A00AFD992 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96290EE1276D130A00AFD992 /* HeaderView.swift */; };
@@ -52,7 +51,6 @@
 /* Begin PBXFileReference section */
 		5A010D997CD8F72CF8A4BA71 /* Pods-Movie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Movie.release.xcconfig"; path = "Target Support Files/Pods-Movie/Pods-Movie.release.xcconfig"; sourceTree = "<group>"; };
 		94D69698E83CFDFC9C1B27BC /* Pods_Movie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Movie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		96290EDA276D0E6D00AFD992 /* MainScreenCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenCellViewModel.swift; sourceTree = "<group>"; };
 		96290EDD276D0F2E00AFD992 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		96290EDF276D117700AFD992 /* UICollectionViewCell+Register+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Register+extension.swift"; sourceTree = "<group>"; };
 		96290EE1276D130A00AFD992 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -121,6 +119,7 @@
 		96290ED8276CC02900AFD992 /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
+				964938B0276CA661009C6708 /* MainScreenViewController.swift */,
 				96290F0B276E66AD00AFD992 /* Network */,
 				96290EE5276D19FF00AFD992 /* Model */,
 				96290ED9276D0E5200AFD992 /* ViewMovel */,
@@ -132,7 +131,6 @@
 		96290ED9276D0E5200AFD992 /* ViewMovel */ = {
 			isa = PBXGroup;
 			children = (
-				96290EDA276D0E6D00AFD992 /* MainScreenCellViewModel.swift */,
 				96290EE3276D19BA00AFD992 /* MainScreenViewModel.swift */,
 			);
 			path = ViewMovel;
@@ -143,7 +141,6 @@
 			children = (
 				96290F03276E5A6000AFD992 /* Views */,
 				96290F06276E64D700AFD992 /* Cells */,
-				964938B0276CA661009C6708 /* MainScreenViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -537,7 +534,6 @@
 				96290EE0276D117700AFD992 /* UICollectionViewCell+Register+extension.swift in Sources */,
 				96290EF7276E06D500AFD992 /* BaseRouter.swift in Sources */,
 				96290EDE276D0F2E00AFD992 /* PhotoCell.swift in Sources */,
-				96290EDB276D0E6D00AFD992 /* MainScreenCellViewModel.swift in Sources */,
 				96290F09276E656F00AFD992 /* HTTPMethods.swift in Sources */,
 				96290F11276F384800AFD992 /* MovieDetailedScreenViewController.swift in Sources */,
 				96290EF8276E06D500AFD992 /* NetworkErrors.swift in Sources */,

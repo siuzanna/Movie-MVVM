@@ -7,20 +7,20 @@
 
 import Foundation
 
-struct Movies : Codable {
-    let id : Int?
-    let type : Int?
-    let series : Bool?
-    let name : String?
-    let time : Int?
-    let genre : [String]?
-    let rating : String?
-    let votes : String?
-    let photo : String?
-    let miniPhoto : String?
-    let description : String?
-    let trailer : String?
-    let comments : [Comments]?
+struct Movies : Codable, Hashable {
+    let id : Int
+    let type : Int
+    let series : Bool
+    let name : String
+    let time : Int
+    let genre : [String]
+    let rating : String
+    let votes : String
+    let photo : String
+    let miniPhoto : String
+    let description : String
+    let trailer : String
+    let comments : [Comments]
 
 	enum CodingKeys: String, CodingKey {
 
@@ -41,19 +41,19 @@ struct Movies : Codable {
 
 	init(from decoder: Decoder) throws {
 		let values = try decoder.container(keyedBy: CodingKeys.self)
-		id = try values.decodeIfPresent(Int.self, forKey: .id)
-		type = try values.decodeIfPresent(Int.self, forKey: .type)
-		series = try values.decodeIfPresent(Bool.self, forKey: .series)
-		name = try values.decodeIfPresent(String.self, forKey: .name)
-		time = try values.decodeIfPresent(Int.self, forKey: .time)
-		genre = try values.decodeIfPresent([String].self, forKey: .genre)
-		rating = try values.decodeIfPresent(String.self, forKey: .rating)
-		votes = try values.decodeIfPresent(String.self, forKey: .votes)
-		photo = try values.decodeIfPresent(String.self, forKey: .photo)
-		miniPhoto = try values.decodeIfPresent(String.self, forKey: .miniPhoto)
-		description = try values.decodeIfPresent(String.self, forKey: .description)
-		trailer = try values.decodeIfPresent(String.self, forKey: .trailer)
-		comments = try values.decodeIfPresent([Comments].self, forKey: .comments)
+		id = try values.decode(Int.self, forKey: .id)
+		type = try values.decode(Int.self, forKey: .type)
+		series = try values.decode(Bool.self, forKey: .series)
+		name = try values.decode(String.self, forKey: .name)
+		time = try values.decode(Int.self, forKey: .time)
+		genre = try values.decode([String].self, forKey: .genre)
+		rating = try values.decode(String.self, forKey: .rating)
+		votes = try values.decode(String.self, forKey: .votes)
+		photo = try values.decode(String.self, forKey: .photo)
+		miniPhoto = try values.decode(String.self, forKey: .miniPhoto)
+		description = try values.decode(String.self, forKey: .description)
+		trailer = try values.decode(String.self, forKey: .trailer)
+		comments = try values.decode([Comments].self, forKey: .comments)
 	}
 
 }

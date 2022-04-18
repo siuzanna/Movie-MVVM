@@ -123,7 +123,7 @@ class TopView: UICollectionReusableView {
     
     private var webView = WKWebView()
     
-    var cellViewModel: MainScreenCellViewModel? {
+    var cellViewModel: Movies? {
         didSet {
             if let url = cellViewModel?.photo {
                 self.imageView.sd_setImage(

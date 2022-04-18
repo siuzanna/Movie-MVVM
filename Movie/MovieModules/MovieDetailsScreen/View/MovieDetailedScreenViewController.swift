@@ -14,12 +14,23 @@ class MovieDetailedScreenViewController: UIViewController {
     private var collectionView: UICollectionView! = nil
     private lazy var navigationBar = { NavigationBarBack() }()
     
-    var viewViewModel: MainScreenCellViewModel? {
-        didSet {
-            self.configureCollectionView()
-            self.configureDataSource()
-            self.setupNavigationBar()
-        }
+    var viewViewModel: Movies
+    
+    init(viewModel: Movies) {
+        self.viewViewModel = viewModel
+        
+        super.init(nibName: nil, bundle: nil)
+        self.configureCollectionView()
+        self.configureDataSource()
+        self.setupNavigationBar()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print(self, "died")
     }
     
     enum Section: String, CaseIterable {
@@ -90,9 +101,8 @@ extension MovieDetailedScreenViewController {
             
             let sectionLayoutKind = Section.allCases[sectionIndex]
             switch sectionLayoutKind {
-                case .comments: return self.generateEmtyCellLayout()
-                case .recommend: return self.generateCommentsLayout()
-                    
+            case .comments: return self.generateEmtyCellLayout()
+            case .recommend: return self.generateCommentsLayout()
             }
         }
         layout.register(
@@ -120,7 +130,7 @@ extension MovieDetailedScreenViewController {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
         sectionHeader.zIndex = 2
-
+        
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = UICollectionLayoutSectionOrthogonalScrollingBehavior.continuous
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
@@ -141,7 +151,7 @@ extension MovieDetailedScreenViewController {
             heightDimension: .absolute(82))
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize, subitems: [item])
-     
+        
         let footerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .absolute(52))
@@ -150,7 +160,7 @@ extension MovieDetailedScreenViewController {
             elementKind: UICollectionView.elementKindSectionFooter,
             alignment: .bottom)
         sectionFooter.zIndex = 2
- 
+        
         let section = NSCollectionLayoutSection(group: group)
         section.interGroupSpacing = 5
         
@@ -176,13 +186,13 @@ extension MovieDetailedScreenViewController {
         <Section, Item>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
             switch item {
-                case .comments(let comments):
-                    print(comments)
-                    return  UICollectionViewCell()
-                case .recommend(let photo):
-                    let cell: CommentsCell = collectionView.dequeue(for: indexPath)
-                    cell.cellViewModel = photo
-                    return cell
+            case .comments(let comments):
+                print(comments)
+                return  UICollectionViewCell()
+            case .recommend(let photo):
+                let cell: CommentsCell = collectionView.dequeue(for: indexPath)
+                cell.cellViewModel = photo
+                return cell
             }
         }
         
@@ -190,13 +200,13 @@ extension MovieDetailedScreenViewController {
             ( collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
             let sectionType = Section.allCases[indexPath.section]
             switch sectionType {
-                case .comments:
-                    let supplementaryView: TopView = collectionView.dequeue(for: indexPath, kind: kind)
-                    supplementaryView.cellViewModel = self.viewViewModel
-                    return supplementaryView 
-                case .recommend:
-                    let supplementaryView: CommentsViewFooter = collectionView.dequeue(for: indexPath, kind: kind)
-                    return supplementaryView
+            case .comments:
+                let supplementaryView: TopView = collectionView.dequeue(for: indexPath, kind: kind)
+                supplementaryView.cellViewModel = self.viewViewModel
+                return supplementaryView
+            case .recommend:
+                let supplementaryView: CommentsViewFooter = collectionView.dequeue(for: indexPath, kind: kind)
+                return supplementaryView
             }
         }
         
@@ -207,10 +217,10 @@ extension MovieDetailedScreenViewController {
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
         snapshot.appendSections([.comments, .recommend])
-        if let comments = viewViewModel?.comments {
-            snapshot.appendItems(comments.map({ Item.recommend($0) }), toSection: .recommend)
-            snapshot.appendItems(comments.map({ Item.comments($0) }).suffix(0), toSection: .comments)
-        }
+        let comments = viewViewModel.comments
+        snapshot.appendItems(comments.map({ Item.recommend($0) }), toSection: .recommend)
+        snapshot.appendItems(comments.map({ Item.comments($0) }).suffix(0), toSection: .comments)
+        
         return snapshot
     }
 }

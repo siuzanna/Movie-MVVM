@@ -20,7 +20,7 @@ class PhotoCell: UICollectionViewCell {
         return image
     }()
     
-    var cellViewModel: MainScreenCellViewModel? {
+    var cellViewModel: Movies? {
         didSet {
             if let url = cellViewModel?.miniPhoto {
                 self.imageView.sd_setImage(

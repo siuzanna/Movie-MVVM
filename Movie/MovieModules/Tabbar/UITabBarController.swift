@@ -59,7 +59,8 @@ enum TabBar: String, CaseIterable {
         var viewController = UINavigationController()
         switch self {
             case .home:
-                viewController = UINavigationController(rootViewController: MainScreenViewController())
+            let viewModel = MainScreenViewModel()
+                viewController = UINavigationController(rootViewController: MainScreenViewController(viewModel: viewModel))
             case .explore:
                 viewController = UINavigationController(rootViewController: UIViewController())
             case .bookmark:
