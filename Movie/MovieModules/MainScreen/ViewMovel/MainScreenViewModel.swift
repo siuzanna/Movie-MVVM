@@ -7,7 +7,24 @@
 
 import Foundation
 
-class MainScreenViewModel: NSObject {
+protocol MainScreenServiceProtocol {
+    var successResponse: (() -> Void)? { get set }
+    var errorResponse: ((String) -> Void)? { get set }
+    
+    var menuCellViewModel: [Movies] { get set }
+    var topCellViewModel: [Movies] { get set }
+    var popularCellViewModel: [Movies] { get set }
+    var comingSoonCellViewModel: [Movies] { get set }
+    var lastUpdatedCellViewModel: [Movies] { get set }
+    var bestSeriesCellViewModel: [Movies] { get set }
+    
+    func getByIndexPath(_ indexPath: IndexPath) -> Movies
+    func getMenu()
+}
+
+class MainScreenViewModel: MainScreenServiceProtocol {
+    let networkService: NetworkService = NetworkService()
+    
     var successResponse: (() -> Void)?
     var errorResponse: ((String) -> Void)?
     
@@ -18,15 +35,13 @@ class MainScreenViewModel: NSObject {
     var lastUpdatedCellViewModel = [Movies]()
     var bestSeriesCellViewModel = [Movies]()
     
-    private var menuService: MainScreenServiceProtocol
-
-    init(menuService: MainScreenServiceProtocol = MainScreenService()) {
-        self.menuService = menuService
+    func getByIndexPath(_ indexPath: IndexPath) -> Movies {
+        return menuCellViewModel[indexPath.row]
     }
     
     func getMenu() {
-        menuService.getMenu { success, model, error in
-            if success, let movies = model {
+        self.requestItems { model, error in
+            if  let movies = model {
                 for movie in movies {
                     if movie.type == 0 {
                         self.topCellViewModel.append(movie)
@@ -48,7 +63,22 @@ class MainScreenViewModel: NSObject {
         }
     }
     
-    func getbyIndexPath(_ indexPath: IndexPath) -> Movies {
-        return menuCellViewModel[indexPath.row]
+    func requestItems(completion: @escaping ([Movies]?, String?) -> Void) {
+        networkService.sendRequest(
+            urlRequest: MainScreenRouter.getAllPosts.createURLRequest(),
+            successModel: [Movies].self
+        ) { [weak self] (result) in
+            guard self != nil else {return}
+            switch result {
+            case .success(let model):
+                completion(model, nil)
+            case .badRequest(let error):
+                completion(nil, error.errors?.first)
+                debugPrint(#function, error)
+            case .failure(let error):
+                completion(nil, error)
+                debugPrint(#function, error)
+            }
+        }
     }
 }

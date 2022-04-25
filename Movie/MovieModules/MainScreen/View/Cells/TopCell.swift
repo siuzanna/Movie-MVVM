@@ -7,10 +7,11 @@
 
 import UIKit
 import SnapKit
-import SDWebImage
+import Kingfisher
 
 class TopCell: UICollectionViewCell {
-    public lazy var imageView: UIImageView = {
+    
+    private lazy var imageView: UIImageView = {
         let image = UIImageView()
         image.layer.masksToBounds = true
         image.clipsToBounds = true
@@ -19,32 +20,27 @@ class TopCell: UICollectionViewCell {
         return image
     }()
     
-    var cellViewModel: Movies? {
-        didSet {
-            if let url = cellViewModel?.photo {
-                self.imageView.sd_setImage(
-                    with: URL(string: url),
-                    placeholderImage: Icons.launchPhoto.image,
-                    options: [.continueInBackground, .progressiveLoad],
-                    completed: nil)
-            }
-        }
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
-    }
-    
-    func configure() {
-        contentView.addSubview(imageView)
-        imageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func configure() {
+        contentView.addSubview(imageView)
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    func configureCell(model: Movies?) {
+        if let url = model?.photo {
+            self.imageView.kf.setImage(with: URL(string: url))
+        } else {
+            self.imageView.image = Icons.launchPhoto.image
+        }
+    }
 }

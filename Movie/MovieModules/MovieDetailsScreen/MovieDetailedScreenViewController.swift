@@ -9,15 +9,25 @@ import UIKit
 
 class MovieDetailedScreenViewController: UIViewController {
     
+    enum Section: String, CaseIterable {
+        case comments = "Comments"
+        case recommend = ""
+    }
+    
+    enum Item: Hashable {
+        case comments(Comments)
+        case recommend(Comments)
+    }
+    
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     private var collectionView: UICollectionView! = nil
     private lazy var navigationBar = { NavigationBarBack() }()
     
-    var viewViewModel: Movies
+    var viewModel: Movies
     
     init(viewModel: Movies) {
-        self.viewViewModel = viewModel
+        self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
         self.configureCollectionView()
@@ -31,16 +41,6 @@ class MovieDetailedScreenViewController: UIViewController {
     
     deinit {
         print(self, "died")
-    }
-    
-    enum Section: String, CaseIterable {
-        case comments = "Comments"
-        case recommend = ""
-    }
-    
-    enum Item: Hashable {
-        case comments(Comments)
-        case recommend(Comments)
     }
     
     override func viewDidLoad() {
@@ -202,7 +202,7 @@ extension MovieDetailedScreenViewController {
             switch sectionType {
             case .comments:
                 let supplementaryView: TopView = collectionView.dequeue(for: indexPath, kind: kind)
-                supplementaryView.cellViewModel = self.viewViewModel
+                supplementaryView.cellViewModel = self.viewModel
                 return supplementaryView
             case .recommend:
                 let supplementaryView: CommentsViewFooter = collectionView.dequeue(for: indexPath, kind: kind)
@@ -217,7 +217,7 @@ extension MovieDetailedScreenViewController {
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
         snapshot.appendSections([.comments, .recommend])
-        let comments = viewViewModel.comments
+        let comments = viewModel.comments
         snapshot.appendItems(comments.map({ Item.recommend($0) }), toSection: .recommend)
         snapshot.appendItems(comments.map({ Item.comments($0) }).suffix(0), toSection: .comments)
         

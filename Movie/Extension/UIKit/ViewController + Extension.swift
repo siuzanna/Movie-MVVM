@@ -23,6 +23,12 @@ extension UIViewController {
     func removeBackButtonTitle() {
         navigationItem.backButtonTitle = ""
     }
+     
+    func showAlert(withTitle title: String, message: String, buttonName: String = "OK") {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: buttonName, style: .default))
+        present(alertController, animated: true)
+    }
 }
 
 class BaseNavigationController: UINavigationController {

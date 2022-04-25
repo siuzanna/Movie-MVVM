@@ -14,7 +14,6 @@ struct Comments : Codable, Hashable {
     let picture : String?
 
     enum CodingKeys: String, CodingKey {
-
         case id = "id"
         case name = "name"
         case comment = "comment"
@@ -28,5 +27,4 @@ struct Comments : Codable, Hashable {
         comment = try values.decodeIfPresent(String.self, forKey: .comment)
         picture = try values.decodeIfPresent(String.self, forKey: .picture)
     }
-
 }

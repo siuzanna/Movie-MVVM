@@ -87,5 +87,4 @@ class NavigationBar: UIView {
 
          }
     }
-
 }

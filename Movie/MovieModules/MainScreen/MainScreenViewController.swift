@@ -30,33 +30,38 @@ class MainScreenViewController: UIViewController {
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     private var collectionView: UICollectionView! = nil
     private lazy var navigationBar = { NavigationBar() }()
-    private var menuViewModel: MainScreenViewModel
+    private var viewModel: MainScreenServiceProtocol
     
-    init(viewModel: MainScreenViewModel) {
-        self.menuViewModel = viewModel
+    init(viewModel: MainScreenServiceProtocol) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Colors.bg.color
         view.addSubview(navigationBar)
         setupNavigationBar()
-        initViewModel()
+        setupResponses()
+        viewModel.getMenu()
     }
     
-    private func initViewModel() {
-        menuViewModel.getMenu()
-        
-        menuViewModel.successResponse = { [weak self] in
+    private func setupResponses() {
+        viewModel.successResponse = { [weak self] in
             DispatchQueue.main.async {
                 self?.configureCollectionView()
                 self?.configureDataSource()
                 self?.setupCollectionViewConstraints()
+            }
+        }
+        
+        viewModel.errorResponse = { [weak self] error in
+            DispatchQueue.main.async {
+                self?.showAlert(withTitle: "Error occurred", message: error)
             }
         }
     }
@@ -211,11 +216,11 @@ extension MainScreenViewController {
             switch item {
             case .topSlide(let photo):
                 let cell: TopCell = collectionView.dequeue(for: indexPath)
-                cell.cellViewModel = photo
+                cell.configureCell(model: photo)
                 return cell
             case .mostPopular(let photo), .comingSoon(let photo), .lastUpdate(let photo), .bestSeries(let photo):
                 let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                cell.cellViewModel = photo
+                cell.configureCell(model: photo)
                 return cell
             }
         }
@@ -225,17 +230,17 @@ extension MainScreenViewController {
             let sectionType = Section.allCases[indexPath.section]
             switch sectionType {
             case .topSlide:
-                let supplementaryView: UICollectionReusableView = collectionView.dequeue(for: indexPath, kind: kind)
-                return supplementaryView
+                let header: UICollectionReusableView = collectionView.dequeue(for: indexPath, kind: kind)
+                return header
             case .comingSoon:
-                let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
-                supplementaryView.buttonLable.text = ""
-                return supplementaryView
+                let header: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                header.label.text = Section.allCases[indexPath.section].rawValue
+                header.buttonLabel.text = ""
+                return header
             case .mostPopular, .lastUpdate, .bestSeries:
-                let supplementaryView: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                supplementaryView.label.text = Section.allCases[indexPath.section].rawValue
-                return supplementaryView
+                let header: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                header.label.text = Section.allCases[indexPath.section].rawValue
+                return header
             }
         }
         
@@ -246,32 +251,32 @@ extension MainScreenViewController {
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
         snapshot.appendSections([.topSlide, .mostPopular, .comingSoon, .lastUpdate, .bestSeries])
-        snapshot.appendItems(menuViewModel.topCellViewModel.map({ Item.topSlide($0) }), toSection: .topSlide)
-        snapshot.appendItems(menuViewModel.popularCellViewModel.map({ Item.mostPopular($0) }), toSection: .mostPopular)
-        snapshot.appendItems(menuViewModel.comingSoonCellViewModel.map({ Item.comingSoon($0) }).suffix(1), toSection: .comingSoon)
-        snapshot.appendItems(menuViewModel.lastUpdatedCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
-        snapshot.appendItems(menuViewModel.bestSeriesCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
+        snapshot.appendItems(viewModel.topCellViewModel.map({ Item.topSlide($0) }), toSection: .topSlide)
+        snapshot.appendItems(viewModel.popularCellViewModel.map({ Item.mostPopular($0) }), toSection: .mostPopular)
+        snapshot.appendItems(viewModel.comingSoonCellViewModel.map({ Item.comingSoon($0) }).suffix(1), toSection: .comingSoon)
+        snapshot.appendItems(viewModel.lastUpdatedCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
+        snapshot.appendItems(viewModel.bestSeriesCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
         return snapshot
     }
 }
 
 extension MainScreenViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let viewModel: Movies
+        let vm: Movies
         
         switch Section.allCases[indexPath.section] {
         case .topSlide:
-            viewModel = menuViewModel.topCellViewModel[indexPath.row]
+            vm = viewModel.topCellViewModel[indexPath.row]
         case .mostPopular:
-            viewModel = menuViewModel.popularCellViewModel[indexPath.row]
+            vm = viewModel.popularCellViewModel[indexPath.row]
         case .comingSoon:
-            viewModel = menuViewModel.comingSoonCellViewModel[indexPath.row]
+            vm = viewModel.comingSoonCellViewModel[indexPath.row]
         case .lastUpdate:
-            viewModel = menuViewModel.lastUpdatedCellViewModel[indexPath.row]
+            vm = viewModel.lastUpdatedCellViewModel[indexPath.row]
         case .bestSeries:
-            viewModel = menuViewModel.bestSeriesCellViewModel[indexPath.row]
+            vm = viewModel.bestSeriesCellViewModel[indexPath.row]
         }
-        let view = MovieDetailedScreenViewController(viewModel: viewModel)
+        let view = MovieDetailedScreenViewController(viewModel: vm)
         view.modalPresentationStyle = .overCurrentContext
         self.present(view, animated: true, completion: nil)
     }

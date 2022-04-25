@@ -23,7 +23,6 @@ struct Movies : Codable, Hashable {
     let comments : [Comments]
 
 	enum CodingKeys: String, CodingKey {
-
 		case id = "id"
 		case type = "type"
 		case series = "series"
@@ -55,5 +54,4 @@ struct Movies : Codable, Hashable {
 		trailer = try values.decode(String.self, forKey: .trailer)
 		comments = try values.decode([Comments].self, forKey: .comments)
 	}
-
 }
