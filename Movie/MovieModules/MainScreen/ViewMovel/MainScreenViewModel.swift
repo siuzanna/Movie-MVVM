@@ -7,86 +7,78 @@
 
 import Foundation
 
-class MainScreenViewModel: NSObject {
+protocol MainScreenServiceProtocol {
+    var successResponse: (() -> Void)? { get set }
+    var errorResponse: ((String) -> Void)? { get set }
     
-    private var menuService: MainScreenServiceProtocol
+    var menuCellViewModel: [Movies] { get set }
+    var topCellViewModel: [Movies] { get set }
+    var popularCellViewModel: [Movies] { get set }
+    var comingSoonCellViewModel: [Movies] { get set }
+    var lastUpdatedCellViewModel: [Movies] { get set }
+    var bestSeriesCellViewModel: [Movies] { get set }
     
-    var reloadDataSource: (() -> Void)?
+    func getByIndexPath(_ indexPath: IndexPath) -> Movies
+    func getMenu()
+}
+
+class MainScreenViewModel: MainScreenServiceProtocol {
+    let networkService: NetworkService = NetworkService()
     
-    var movie = [Movies]()
+    var successResponse: (() -> Void)?
+    var errorResponse: ((String) -> Void)?
     
-    var menuCellViewModel = [MainScreenCellViewModel]() {
-        didSet {
-            reloadDataSource?()
-        }
-    }
+    var menuCellViewModel = [Movies]()
+    var topCellViewModel = [Movies]()
+    var popularCellViewModel = [Movies]()
+    var comingSoonCellViewModel = [Movies]()
+    var lastUpdatedCellViewModel = [Movies]()
+    var bestSeriesCellViewModel = [Movies]()
     
-    var topCellViewModel = [MainScreenCellViewModel]()
-    var popularCellViewModel = [MainScreenCellViewModel]()
-    var comingSoonCellViewModel = [MainScreenCellViewModel]()
-    var lastUpdatedCellViewModel = [MainScreenCellViewModel]()
-    var bestSeriesCellViewModel = [MainScreenCellViewModel]()
-    
-    init(menuService: MainScreenServiceProtocol = MainScreenService()) {
-        self.menuService = menuService
+    func getByIndexPath(_ indexPath: IndexPath) -> Movies {
+        return menuCellViewModel[indexPath.row]
     }
     
     func getMenu() {
-        menuService.getMenu { success, model, error in
-            if success, let movies = model {
-                var model = [MainScreenCellViewModel]()
+        self.requestItems { model, error in
+            if  let movies = model {
                 for movie in movies {
-                    model.append(self.createCellModel(movie: movie))
                     if movie.type == 0 {
-                        self.topCellViewModel.append(self.createCellModel(movie: movie))
+                        self.topCellViewModel.append(movie)
                     } else if movie.type == 1 {
-                        self.popularCellViewModel.append(self.createCellModel(movie: movie))
+                        self.popularCellViewModel.append(movie)
                     } else if movie.type == 2 {
-                        self.comingSoonCellViewModel.append(self.createCellModel(movie: movie))
+                        self.comingSoonCellViewModel.append(movie)
                     } else if movie.type == 3 {
-                        self.lastUpdatedCellViewModel.append(self.createCellModel(movie: movie))
+                        self.lastUpdatedCellViewModel.append(movie)
                     } else if movie.type == 4 {
-                        self.bestSeriesCellViewModel.append(self.createCellModel(movie: movie))
+                        self.bestSeriesCellViewModel.append(movie)
                     }
                 }
-                self.menuCellViewModel = model
+                self.menuCellViewModel = movies
+                self.successResponse?()
             } else {
-                print(error!)
+                self.errorResponse?(error ?? "Произошла ошибка")
             }
         }
     }
     
-    func createCellModel(movie: Movies) -> MainScreenCellViewModel {
-        let id = movie.id
-        let type = movie.type
-        let series = movie.series
-        let name = movie.name
-        let time = movie.time
-        let genre = movie.genre
-        let rating = movie.rating
-        let votes = movie.votes
-        let photo = movie.photo
-        let miniPhoto = movie.miniPhoto
-        let description = movie.description
-        let trailer = movie.trailer
-        let comments = movie.comments
-        return MainScreenCellViewModel(
-            id: id,
-            type: type,
-            series: series,
-            name: name,
-            time: time,
-            genre: genre,
-            rating: rating,
-            votes: votes,
-            photo: photo,
-            miniPhoto: miniPhoto,
-            description: description,
-            trailer: trailer,
-            comments: comments)
-    }
-    
-    func getbyIndexPath(_ indexPath: IndexPath) -> MainScreenCellViewModel {
-        return menuCellViewModel[indexPath.row]
+    func requestItems(completion: @escaping ([Movies]?, String?) -> Void) {
+        networkService.sendRequest(
+            urlRequest: MainScreenRouter.getAllPosts.createURLRequest(),
+            successModel: [Movies].self
+        ) { [weak self] (result) in
+            guard self != nil else {return}
+            switch result {
+            case .success(let model):
+                completion(model, nil)
+            case .badRequest(let error):
+                completion(nil, error.errors?.first)
+                debugPrint(#function, error)
+            case .failure(let error):
+                completion(nil, error)
+                debugPrint(#function, error)
+            }
+        }
     }
 }

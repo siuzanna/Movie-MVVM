@@ -14,12 +14,12 @@ class SectionBackgroundDecorationView: UICollectionReusableView {
         configure()
     }
     
-    func configure() {
-        backgroundColor = Colors.commetsView.color
-        layer.cornerRadius = 12
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    required init?(coder: NSCoder) {
-        fatalError()
+    private func configure() {
+        backgroundColor = Colors.commentsView.color
+        layer.cornerRadius = 12
     }
 }

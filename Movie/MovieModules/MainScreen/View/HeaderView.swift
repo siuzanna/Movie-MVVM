@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import SnapKit
 
 class HeaderView: UICollectionReusableView {
 
-    let label: UILabel = {
+    public let label: UILabel = {
         let text = UILabel()
         text.textColor = .white
         text.font = UIFont.boldSystemFont(ofSize: 21)
@@ -17,7 +18,7 @@ class HeaderView: UICollectionReusableView {
         return text
     }()
 
-    let buttonLable: UILabel = {
+    public let buttonLabel: UILabel = {
         let text = UILabel()
         text.text = "See All >"
         text.textColor = UIColor(red: 0.467, green: 0.467, blue: 0.467, alpha: 1)
@@ -29,21 +30,21 @@ class HeaderView: UICollectionReusableView {
         super.init(frame: frame)
         configure()
     }
-
-    func configure() {
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure() {
         addSubview(label)
-        addSubview(buttonLable)
+        addSubview(buttonLabel)
         label.snp.makeConstraints { make in
             make.bottom.top.equalToSuperview().inset(8)
             make.leading.trailing.equalToSuperview().inset(8)
         }
-        buttonLable.snp.makeConstraints { make in
+        buttonLabel.snp.makeConstraints { make in
             make.centerY.equalTo(label.snp.centerY)
             make.trailing.equalToSuperview().inset(16)
         }
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError()
     }
 }

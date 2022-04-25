@@ -9,7 +9,7 @@ import UIKit
 
 class CommentsViewFooter: UICollectionReusableView {
   
-    let buttonLable: UILabel = {
+    private let buttonLabel: UILabel = {
         let text = UILabel()
         text.text = "See All >"
         text.textColor = UIColor(red: 0.467, green: 0.467, blue: 0.467, alpha: 1)
@@ -21,15 +21,19 @@ class CommentsViewFooter: UICollectionReusableView {
         super.init(frame: frame)
         configure()
     }
-
-    func configure() {
-        addSubview(buttonLable)
-        buttonLable.snp.makeConstraints { make in
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure() {
+        addSubview(buttonLabel)
+        buttonLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
     }
-
-    required init?(coder: NSCoder) {
-        fatalError()
+    
+    func setTitle(_ text: String) {
+        buttonLabel.text = text
     }
 }

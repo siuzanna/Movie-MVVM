@@ -7,6 +7,8 @@
 
 import UIKit
 import WebKit
+import Kingfisher
+import SnapKit
 
 class TopView: UICollectionReusableView {
     
@@ -123,21 +125,23 @@ class TopView: UICollectionReusableView {
     
     private var webView = WKWebView()
     
-    var cellViewModel: MainScreenCellViewModel? {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+        configureTrailerView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    var cellViewModel: Movies? {
         didSet {
             if let url = cellViewModel?.photo {
-                self.imageView.sd_setImage(
-                    with: URL(string: url),
-                    placeholderImage: UIImage(),
-                    options: [.continueInBackground, .progressiveLoad],
-                    completed: nil)
+                self.imageView.kf.setImage(with: URL(string: url))
             }
             if let url = cellViewModel?.miniPhoto {
-                self.posterView.sd_setImage(
-                    with: URL(string: url),
-                    placeholderImage: UIImage(),
-                    options: [.continueInBackground, .progressiveLoad],
-                    completed: nil)
+                self.posterView.kf.setImage(with: URL(string: url))
             }
             if let url = cellViewModel?.trailer {
                 let webConfiguration = WKWebViewConfiguration()
@@ -178,12 +182,6 @@ class TopView: UICollectionReusableView {
                     imageColor: Colors.title.color)
             }
         }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configure()
-        configureTrailerView()
     }
     
     func configure() {
@@ -244,9 +242,5 @@ class TopView: UICollectionReusableView {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError()
     }
 }
