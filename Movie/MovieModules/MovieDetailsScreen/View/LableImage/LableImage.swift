@@ -28,6 +28,10 @@ class LableImage: UIView {
         configure()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func configure() {
         addSubview(imageView)
         addSubview(nameLabel)
@@ -46,9 +50,5 @@ class LableImage: UIView {
         nameLabel.text = text
         imageView.image = image
         imageView.tintColor = imageColor
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError()
     }
 }

@@ -68,6 +68,10 @@ class CommentsCell: UICollectionViewCell {
         configure()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func configure() {
         containerView.addSubview(nameLabel)
         containerView.addSubview(commentLabel)
@@ -109,9 +113,5 @@ class CommentsCell: UICollectionViewCell {
             make.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(15)
         }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
+    } 
 }

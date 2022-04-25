@@ -8,7 +8,7 @@
 import UIKit
 
 class MovieDetailedScreenViewController: UIViewController {
-    
+
     enum Section: String, CaseIterable {
         case comments = "Comments"
         case recommend = ""
@@ -20,11 +20,10 @@ class MovieDetailedScreenViewController: UIViewController {
     }
     
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
+    private lazy var navigationBar = { NavigationBarBack() }()
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     private var collectionView: UICollectionView! = nil
-    private lazy var navigationBar = { NavigationBarBack() }()
-    
-    var viewModel: Movies
+    private var viewModel: Movies
     
     init(viewModel: Movies) {
         self.viewModel = viewModel
@@ -37,10 +36,6 @@ class MovieDetailedScreenViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        print(self, "died")
     }
     
     override func viewDidLoad() {

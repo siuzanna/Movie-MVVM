@@ -125,6 +125,16 @@ class TopView: UICollectionReusableView {
     
     private var webView = WKWebView()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+        configureTrailerView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     var cellViewModel: Movies? {
         didSet {
             if let url = cellViewModel?.photo {
@@ -172,16 +182,6 @@ class TopView: UICollectionReusableView {
                     imageColor: Colors.title.color)
             }
         }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configure()
-        configureTrailerView()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     func configure() {
