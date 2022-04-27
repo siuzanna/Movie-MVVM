@@ -5,7 +5,6 @@ excluded:
 disabled_rules:
   - trailing_whitespace
   - force_cast
-  - colon
   - switch_case_alignment
   - redundant_string_enum_value
   - closure_parameter_position

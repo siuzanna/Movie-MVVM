@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Comments : Codable, Hashable {
-    let id : Int?
-    let name : String?
-    let comment : String?
-    let picture : String?
+struct Comments: Codable, Hashable {
+    let id: Int?
+    let name: String?
+    let comment: String?
+    let picture: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
