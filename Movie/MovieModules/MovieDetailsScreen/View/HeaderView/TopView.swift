@@ -150,7 +150,7 @@ class TopView: UICollectionReusableView {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     self.webView = WKWebView(frame: self.trailerView.bounds, configuration: webConfiguration)
                     self.trailerView.addSubview(self.webView)
-                    guard let videoURL = URL(string:  url) else { return }
+                    guard let videoURL = URL(string: url) else { return }
                     let request = URLRequest(url: videoURL)
                     self.webView.load(request)
                 }
