@@ -59,8 +59,4 @@ App shows you collections of TV streaming and other movies. Movie app written in
 - Run $ pod install.
 - Open the Movie.xcworkspace.
 
-## Author Info
-
-- Telegram - [@siuzannq](https://t.me/siuzannq)
-
 [Back To The Top](#Movie)
