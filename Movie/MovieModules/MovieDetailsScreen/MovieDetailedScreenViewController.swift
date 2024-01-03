@@ -19,8 +19,9 @@ class MovieDetailedScreenViewController: UIViewController {
         case recommend(Comments)
     }
     
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     private lazy var navigationBar = { NavigationBarBack() }()
+
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
     private var collectionView: UICollectionView! = nil
     private var viewModel: Movies

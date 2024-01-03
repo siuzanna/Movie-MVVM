@@ -10,7 +10,7 @@ import WebKit
 import Kingfisher
 import SnapKit
 
-class TopView: UICollectionReusableView {
+final class TopView: UICollectionReusableView {
     
     private lazy var imageView: UIImageView = {
         let image = UIImageView()

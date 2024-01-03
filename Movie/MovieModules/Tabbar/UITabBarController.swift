@@ -59,7 +59,6 @@ enum TabBar: String, CaseIterable {
             let viewModel = MainScreenViewModel()
             viewController = UINavigationController(rootViewController: MainScreenViewController(viewModel: viewModel))
         }
-        
         viewController.setNavigationBarHidden(true, animated: true)
         viewController.tabBarItem = tabBarItem
         viewController.tabBarItem.imageInsets.top = 5

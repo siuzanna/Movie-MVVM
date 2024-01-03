@@ -67,5 +67,6 @@ class NetworkService {
     ) -> Model? {
         guard let data = data else {return nil}
         return try? JSONDecoder().decode(Model.self, from: data)
+        
     }
 }
