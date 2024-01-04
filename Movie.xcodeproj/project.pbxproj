@@ -119,20 +119,12 @@
 		96290ED8276CC02900AFD992 /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
-				96290EE5276D19FF00AFD992 /* Model */,
-				96290EDC276D0F0300AFD992 /* View */,
-				96290ED9276D0E5200AFD992 /* ViewMovel */,
 				964938B0276CA661009C6708 /* MainScreenViewController.swift */,
+				96290EE3276D19BA00AFD992 /* MainScreenViewModel.swift */,
+				96290EDC276D0F0300AFD992 /* View */,
+				96290F06276E64D700AFD992 /* Cells */,
 			);
 			path = MainScreen;
-			sourceTree = "<group>";
-		};
-		96290ED9276D0E5200AFD992 /* ViewMovel */ = {
-			isa = PBXGroup;
-			children = (
-				96290EE3276D19BA00AFD992 /* MainScreenViewModel.swift */,
-			);
-			path = ViewMovel;
 			sourceTree = "<group>";
 		};
 		96290EDC276D0F0300AFD992 /* View */ = {
@@ -140,18 +132,17 @@
 			children = (
 				96290EE1276D130A00AFD992 /* HeaderView.swift */,
 				96290F04276E5A7C00AFD992 /* NavigationBar.swift */,
-				96290F06276E64D700AFD992 /* Cells */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		96290EE5276D19FF00AFD992 /* Model */ = {
+		96290EE5276D19FF00AFD992 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				96290EFD276E130100AFD992 /* Comments.swift */,
 				96290EFC276E130100AFD992 /* Movies.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		96290EE8276D288900AFD992 /* NetworkService */ = {
@@ -195,8 +186,9 @@
 		96290F0F276F37E100AFD992 /* MovieDetailsScreen */ = {
 			isa = PBXGroup;
 			children = (
-				96290F12276F385400AFD992 /* View */,
 				96290F10276F384800AFD992 /* MovieDetailedScreenViewController.swift */,
+				9635412B276FDFD00036133D /* Cells */,
+				96290F12276F385400AFD992 /* View */,
 			);
 			path = MovieDetailsScreen;
 			sourceTree = "<group>";
@@ -204,22 +196,13 @@
 		96290F12276F385400AFD992 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				96290F18276F69A800AFD992 /* LableImage */,
-				96354130276FE5360036133D /* NavigationBar */,
-				96354131276FE5440036133D /* HeaderView */,
-				96354132276FE5510036133D /* FooterView */,
-				96354133276FE5950036133D /* SectionDecorator */,
-				9635412B276FDFD00036133D /* Cells */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		96290F18276F69A800AFD992 /* LableImage */ = {
-			isa = PBXGroup;
-			children = (
+				96290F14276F397B00AFD992 /* NavigationBarBack.swift */,
+				96290F16276F426C00AFD992 /* TopView.swift */,
+				9635412E276FE0AE0036133D /* CommentsViewFooter.swift */,
+				9635412C276FDFEA0036133D /* SectionDecorationView.swift */,
 				96290F19276F69BC00AFD992 /* LableImage.swift */,
 			);
-			path = LableImage;
+			path = View;
 			sourceTree = "<group>";
 		};
 		9635412B276FDFD00036133D /* Cells */ = {
@@ -228,38 +211,6 @@
 				96354129276FCC370036133D /* CommentsCell.swift */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		96354130276FE5360036133D /* NavigationBar */ = {
-			isa = PBXGroup;
-			children = (
-				96290F14276F397B00AFD992 /* NavigationBarBack.swift */,
-			);
-			path = NavigationBar;
-			sourceTree = "<group>";
-		};
-		96354131276FE5440036133D /* HeaderView */ = {
-			isa = PBXGroup;
-			children = (
-				96290F16276F426C00AFD992 /* TopView.swift */,
-			);
-			path = HeaderView;
-			sourceTree = "<group>";
-		};
-		96354132276FE5510036133D /* FooterView */ = {
-			isa = PBXGroup;
-			children = (
-				9635412E276FE0AE0036133D /* CommentsViewFooter.swift */,
-			);
-			path = FooterView;
-			sourceTree = "<group>";
-		};
-		96354133276FE5950036133D /* SectionDecorator */ = {
-			isa = PBXGroup;
-			children = (
-				9635412C276FDFEA0036133D /* SectionDecorationView.swift */,
-			);
-			path = SectionDecorator;
 			sourceTree = "<group>";
 		};
 		964938A0276CA661009C6708 = {
@@ -288,6 +239,7 @@
 				964938AC276CA661009C6708 /* AppDelegate.swift */,
 				964938AE276CA661009C6708 /* SceneDelegate.swift */,
 				964938CF276CB317009C6708 /* MovieModules */,
+				96290EE5276D19FF00AFD992 /* Models */,
 				96290EE8276D288900AFD992 /* NetworkService */,
 				964938C0276CA719009C6708 /* Extension */,
 				964938C6276CABEF009C6708 /* Resources */,
