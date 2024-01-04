@@ -28,67 +28,52 @@ class MainScreenViewController: UIViewController {
     
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
-    private var collectionView: UICollectionView! = nil
+    private lazy var collectionView: UICollectionView = configureCollectionView()
     private lazy var navigationBar = { NavigationBar() }()
+    private lazy var activityControl = UIActivityIndicatorView(style: .large)
     private var viewModel: MainScreenServiceProtocol
     
     init(viewModel: MainScreenServiceProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Colors.bg.color
-        view.addSubview(navigationBar)
-        setupNavigationBar()
+        activityControl.color = .white
+        setupViews()
         setupResponses()
-        viewModel.getMenu()
+        activityControl.startAnimating()
+        viewModel.requestMovies()
     }
     
     private func setupResponses() {
         viewModel.successResponse = { [weak self] in
             DispatchQueue.main.async {
-                self?.configureCollectionView()
                 self?.configureDataSource()
                 self?.setupCollectionViewConstraints()
+                self?.activityControl.stopAnimating()
             }
         }
         
         viewModel.errorResponse = { [weak self] error in
             DispatchQueue.main.async {
                 self?.showAlert(withTitle: "Error occurred", message: error)
+                self?.activityControl.stopAnimating()
             }
         }
     }
-}
 
-// MARK: Configure Constraints
-extension MainScreenViewController {
-    private func setupCollectionViewConstraints() {
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(85)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
-    }
-    private func setupNavigationBar() {
-        navigationBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(92)
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
-// MARK: Configure UICollectionView
 extension MainScreenViewController {
     
-    func configureCollectionView() {
+    // MARK: Configure UICollectionView
+    func configureCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
         view.addSubview(collectionView)
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -101,7 +86,106 @@ extension MainScreenViewController {
         collectionView.register(cell: PhotoCell.self)
         collectionView.register(cell: TopCell.self)
         collectionView.register(header: HeaderView.self)
-        self.collectionView = collectionView
+        return collectionView
+    }
+
+    // MARK: Configure Constraints
+    private func setupViews() {
+        view.addSubview(navigationBar)
+        view.addSubview(activityControl)
+        navigationBar.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(92)
+        }
+    
+        activityControl.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+    }
+
+    private func setupCollectionViewConstraints() {
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(85)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+}
+
+// MARK: UICollectionViewDiffableDataSource
+extension MainScreenViewController {
+    
+    func configureDataSource() {
+        dataSource = UICollectionViewDiffableDataSource
+        <Section, Item>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
+            switch item {
+            case .topSlide(let photo):
+                let cell: TopCell = collectionView.dequeue(for: indexPath)
+                cell.configureCell(model: photo)
+                return cell
+            case .mostPopular(let photo), .comingSoon(let photo), .lastUpdate(let photo), .bestSeries(let photo):
+                let cell: PhotoCell = collectionView.dequeue(for: indexPath)
+                cell.configureCell(model: photo)
+                return cell
+            }
+        }
+        
+        dataSource.supplementaryViewProvider = {
+            ( collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            let sectionType = Section.allCases[indexPath.section]
+            switch sectionType {
+            case .topSlide:
+                let header: UICollectionReusableView = collectionView.dequeue(for: indexPath, kind: kind)
+                return header
+            case .comingSoon:
+                let header: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                header.label.text = Section.allCases[indexPath.section].rawValue
+                header.buttonLabel.text = ""
+                return header
+            case .mostPopular, .lastUpdate, .bestSeries:
+                let header: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
+                header.label.text = Section.allCases[indexPath.section].rawValue
+                return header
+            }
+        }
+        
+        let snapshot = snapshot()
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func snapshot() -> Snapshot {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.topSlide, .mostPopular, .comingSoon, .lastUpdate, .bestSeries])
+        snapshot.appendItems(viewModel.topCellViewModel.map({ Item.topSlide($0) }), toSection: .topSlide)
+        snapshot.appendItems(viewModel.popularCellViewModel.map({ Item.mostPopular($0) }), toSection: .mostPopular)
+        snapshot.appendItems(viewModel.comingSoonCellViewModel.map({ Item.comingSoon($0) }).suffix(1), toSection: .comingSoon)
+        snapshot.appendItems(viewModel.lastUpdatedCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
+        snapshot.appendItems(viewModel.bestSeriesCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
+        return snapshot
+    }
+}
+
+extension MainScreenViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let model: Movies
+        
+        switch Section.allCases[indexPath.section] {
+        case .topSlide:
+            model = viewModel.topCellViewModel[indexPath.row]
+        case .mostPopular:
+            model = viewModel.popularCellViewModel[indexPath.row]
+        case .comingSoon:
+            model = viewModel.comingSoonCellViewModel[indexPath.row]
+        case .lastUpdate:
+            model = viewModel.lastUpdatedCellViewModel[indexPath.row]
+        case .bestSeries:
+            model = viewModel.bestSeriesCellViewModel[indexPath.row]
+        }
+        let viewController = MovieDetailedScreenViewController(viewModel: model)
+        viewController.modalPresentationStyle = .overCurrentContext
+        present(viewController, animated: true, completion: nil)
     }
 }
 
@@ -203,81 +287,5 @@ extension MainScreenViewController {
         section.orthogonalScrollingBehavior = .none
         
         return section
-    }
-}
-
-// MARK: UICollectionViewDiffableDataSource
-extension MainScreenViewController {
-    
-    func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource
-        <Section, Item>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
-            switch item {
-            case .topSlide(let photo):
-                let cell: TopCell = collectionView.dequeue(for: indexPath)
-                cell.configureCell(model: photo)
-                return cell
-            case .mostPopular(let photo), .comingSoon(let photo), .lastUpdate(let photo), .bestSeries(let photo):
-                let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                cell.configureCell(model: photo)
-                return cell
-            }
-        }
-        
-        dataSource.supplementaryViewProvider = {
-            ( collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
-            let sectionType = Section.allCases[indexPath.section]
-            switch sectionType {
-            case .topSlide:
-                let header: UICollectionReusableView = collectionView.dequeue(for: indexPath, kind: kind)
-                return header
-            case .comingSoon:
-                let header: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                header.label.text = Section.allCases[indexPath.section].rawValue
-                header.buttonLabel.text = ""
-                return header
-            case .mostPopular, .lastUpdate, .bestSeries:
-                let header: HeaderView = collectionView.dequeue(for: indexPath, kind: kind)
-                header.label.text = Section.allCases[indexPath.section].rawValue
-                return header
-            }
-        }
-        
-        let snapshot = snapshot()
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
-    
-    func snapshot() -> Snapshot {
-        var snapshot = Snapshot()
-        snapshot.appendSections([.topSlide, .mostPopular, .comingSoon, .lastUpdate, .bestSeries])
-        snapshot.appendItems(viewModel.topCellViewModel.map({ Item.topSlide($0) }), toSection: .topSlide)
-        snapshot.appendItems(viewModel.popularCellViewModel.map({ Item.mostPopular($0) }), toSection: .mostPopular)
-        snapshot.appendItems(viewModel.comingSoonCellViewModel.map({ Item.comingSoon($0) }).suffix(1), toSection: .comingSoon)
-        snapshot.appendItems(viewModel.lastUpdatedCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
-        snapshot.appendItems(viewModel.bestSeriesCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
-        return snapshot
-    }
-}
-
-extension MainScreenViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vm: Movies
-        
-        switch Section.allCases[indexPath.section] {
-        case .topSlide:
-            vm = viewModel.topCellViewModel[indexPath.row]
-        case .mostPopular:
-            vm = viewModel.popularCellViewModel[indexPath.row]
-        case .comingSoon:
-            vm = viewModel.comingSoonCellViewModel[indexPath.row]
-        case .lastUpdate:
-            vm = viewModel.lastUpdatedCellViewModel[indexPath.row]
-        case .bestSeries:
-            vm = viewModel.bestSeriesCellViewModel[indexPath.row]
-        }
-        let view = MovieDetailedScreenViewController(viewModel: vm)
-        view.modalPresentationStyle = .overCurrentContext
-        self.present(view, animated: true, completion: nil)
     }
 }

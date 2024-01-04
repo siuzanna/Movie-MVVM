@@ -53,7 +53,6 @@ class CommentsCell: UICollectionViewCell {
     }()
     
     let seperatorView = UIView()
-    
     let containerView = UIView()
     
     var cellViewModel: Comments? {

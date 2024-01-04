@@ -18,8 +18,7 @@ protocol MainScreenServiceProtocol {
     var lastUpdatedCellViewModel: [Movies] { get set }
     var bestSeriesCellViewModel: [Movies] { get set }
     
-    func getByIndexPath(_ indexPath: IndexPath) -> Movies
-    func getMenu()
+    func requestMovies()
 }
 
 class MainScreenViewModel: MainScreenServiceProtocol {
@@ -39,7 +38,7 @@ class MainScreenViewModel: MainScreenServiceProtocol {
         return menuCellViewModel[indexPath.row]
     }
     
-    func getMenu() {
+    func requestMovies() {
         self.requestItems { model, error in
             if  let movies = model {
                 for movie in movies {

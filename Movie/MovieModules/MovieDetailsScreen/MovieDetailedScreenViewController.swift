@@ -19,34 +19,33 @@ class MovieDetailedScreenViewController: UIViewController {
         case recommend(Comments)
     }
     
-    private lazy var navigationBar = { NavigationBarBack() }()
-
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
     private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
-    private var collectionView: UICollectionView! = nil
     private var viewModel: Movies
+
+    private lazy var navigationBar = NavigationBarBack()
+    private lazy var collectionView = configureCollectionView()
     
     init(viewModel: Movies) {
         self.viewModel = viewModel
-        
         super.init(nibName: nil, bundle: nil)
-        self.configureCollectionView()
-        self.configureDataSource()
-        self.setupNavigationBar()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Colors.bg.color
-        navigationBar.addBackButtonTarget(self, action: #selector(dismissView), forEvent: .touchUpInside)
+        navigationBar.addBackButtonTarget(self, action: #selector(dismissView), 
+                                          forEvent: .touchUpInside)
+        configureDataSource()
+        setupNavigationBar()
     }
     
     @objc func dismissView() {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -71,9 +70,8 @@ extension MovieDetailedScreenViewController {
 // MARK: Configure UICollectionView
 extension MovieDetailedScreenViewController {
     
-    func configureCollectionView() {
+    func configureCollectionView() -> UICollectionView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
-        view.addSubview(collectionView)
         collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         collectionView.backgroundColor = .clear
         collectionView.showsVerticalScrollIndicator = false
@@ -84,7 +82,54 @@ extension MovieDetailedScreenViewController {
         collectionView.register(header: HeaderView.self)
         collectionView.register(cell: CommentsCell.self)
         collectionView.register(footer: CommentsViewFooter.self)
-        self.collectionView = collectionView
+        return collectionView
+    }
+}
+
+// MARK: UICollectionViewDiffableDataSource
+extension MovieDetailedScreenViewController {
+    
+    func configureDataSource() {
+        dataSource = UICollectionViewDiffableDataSource
+        <Section, Item>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
+            switch item {
+            case .comments(let comments):
+                print(comments)
+                return  UICollectionViewCell()
+            case .recommend(let photo):
+                let cell: CommentsCell = collectionView.dequeue(for: indexPath)
+                cell.cellViewModel = photo
+                return cell
+            }
+        }
+        
+        dataSource.supplementaryViewProvider = { [ weak self ]
+            ( collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            let sectionType = Section.allCases[indexPath.section]
+            switch sectionType {
+            case .comments:
+                let supplementaryView: TopView = collectionView.dequeue(for: indexPath, kind: kind)
+                supplementaryView.cellViewModel = self?.viewModel
+                return supplementaryView
+            case .recommend:
+                let supplementaryView: CommentsViewFooter = collectionView.dequeue(for: indexPath, kind: kind)
+                return supplementaryView
+            }
+        }
+        
+        let snapshot = snapshot()
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    func snapshot() -> Snapshot {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.comments, .recommend])
+        let comments = viewModel.comments
+        snapshot.appendItems(comments.map({ Item.recommend($0) }), toSection: .recommend)
+        snapshot.appendItems(comments.map({ Item.comments($0) }).suffix(0), toSection: .comments)
+        
+        return snapshot
     }
 }
 
@@ -92,13 +137,13 @@ extension MovieDetailedScreenViewController {
 extension MovieDetailedScreenViewController {
     
     func generateLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self ]
             (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
             
             let sectionLayoutKind = Section.allCases[sectionIndex]
             switch sectionLayoutKind {
-            case .comments: return self.generateEmtyCellLayout()
-            case .recommend: return self.generateCommentsLayout()
+            case .comments: return self?.generateEmtyCellLayout()
+            case .recommend: return self?.generateCommentsLayout()
             }
         }
         layout.register(
@@ -171,52 +216,5 @@ extension MovieDetailedScreenViewController {
         section.orthogonalScrollingBehavior = .none
         
         return section
-    }
-}
-
-// MARK: UICollectionViewDiffableDataSource
-extension MovieDetailedScreenViewController {
-    
-    func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource
-        <Section, Item>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
-            switch item {
-            case .comments(let comments):
-                print(comments)
-                return  UICollectionViewCell()
-            case .recommend(let photo):
-                let cell: CommentsCell = collectionView.dequeue(for: indexPath)
-                cell.cellViewModel = photo
-                return cell
-            }
-        }
-        
-        dataSource.supplementaryViewProvider = {
-            ( collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
-            let sectionType = Section.allCases[indexPath.section]
-            switch sectionType {
-            case .comments:
-                let supplementaryView: TopView = collectionView.dequeue(for: indexPath, kind: kind)
-                supplementaryView.cellViewModel = self.viewModel
-                return supplementaryView
-            case .recommend:
-                let supplementaryView: CommentsViewFooter = collectionView.dequeue(for: indexPath, kind: kind)
-                return supplementaryView
-            }
-        }
-        
-        let snapshot = snapshot()
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
-    
-    func snapshot() -> Snapshot {
-        var snapshot = Snapshot()
-        snapshot.appendSections([.comments, .recommend])
-        let comments = viewModel.comments
-        snapshot.appendItems(comments.map({ Item.recommend($0) }), toSection: .recommend)
-        snapshot.appendItems(comments.map({ Item.comments($0) }).suffix(0), toSection: .comments)
-        
-        return snapshot
     }
 }

@@ -240,7 +240,7 @@ final class TopView: UICollectionReusableView {
         commentsLabel.snp.makeConstraints { make in
             make.top.equalTo(trailerView.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().inset(10)
         }
     }
 }

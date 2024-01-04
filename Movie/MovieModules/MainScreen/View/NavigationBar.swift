@@ -17,23 +17,23 @@ class NavigationBar: UIView {
 
     private lazy var searchButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(Icons.Navigation.search.image.withTintColor(Colors.logoRed.color), for: .normal)
+        button.setBackgroundImage(Icons.Navigation.search.image
+            .withTintColor(Colors.logoRed.color), for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
         return button
     }()
 
     private lazy var filterButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(Icons.Navigation.filter.image.withTintColor(Colors.title.color), for: .normal)
-        button.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+        button.setBackgroundImage(Icons.Navigation.filter.image
+            .withTintColor(Colors.title.color), for: .normal)
         return button
     }()
 
     private lazy var menuButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(Icons.Navigation.menu.image.withTintColor(Colors.title.color), for: .normal)
-        button.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+        button.setBackgroundImage(Icons.Navigation.menu.image
+            .withTintColor(Colors.title.color), for: .normal)
         return button
     }()
 
@@ -76,15 +76,16 @@ class NavigationBar: UIView {
             make.centerY.equalToSuperview()
             make.width.height.equalTo(27)
         }
+        
+        [menuButton, filterButton, searchButton].forEach {
+            $0.addTarget(self, action: #selector(tapped(_:)), for: .touchUpInside)
+        }
     }
 
     @objc private func tapped(_ sender: UIButton) {
         if sender == filterButton {
-
          } else if sender == searchButton {
-
          } else if sender == menuButton {
-
          }
     }
 }
