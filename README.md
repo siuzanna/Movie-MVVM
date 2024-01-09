@@ -1,4 +1,6 @@
-# Movie        [![wakatime](https://wakatime.com/badge/github/siuzanna/Movie.svg)](https://wakatime.com/badge/github/siuzanna/Movie)
+# Movie        [![wakatime](https://wakatime.com/badge/github/siuzanna/Movie.svg)](https://wakatime.com/badge/github/siuzanna/Movie) 
+  
+<a href="https://www.buymeacoffee.com/siuzanna" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 App shows you collections of TV streaming and other movies. Movie app written in Swift & UIKit using the [Custom API](https://www.mocky.io/v3/3feccf06-6bc1-480d-97af-bbc05d785f86) created on the Mocky website. App built using the MVVM architecture and 100% programmatic UI (No Storyboard).
 
