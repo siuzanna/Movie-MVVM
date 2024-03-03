@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NavigationBar: UIView {
+final class NavigationBar: UIView {
 
     private lazy var logoImageView: UIImageView = {
         let image = UIImageView()

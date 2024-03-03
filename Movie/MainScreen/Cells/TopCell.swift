@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class TopCell: UICollectionViewCell {
+final class TopCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let image = UIImageView()
@@ -24,11 +24,15 @@ class TopCell: UICollectionViewCell {
         super.init(frame: frame)
         configure()
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+     
+    public func configureCell(model: MovieDTO?) {
+        if let url = model?.photo {
+            self.imageView.kf.setImage(with: URL(string: url))
+        } else {
+            self.imageView.image = Icons.launchPhoto.image
+        }
     }
-    
+
     private func configure() {
         contentView.addSubview(imageView)
         imageView.snp.makeConstraints { make in
@@ -36,11 +40,7 @@ class TopCell: UICollectionViewCell {
         }
     }
     
-    func configureCell(model: Movies?) {
-        if let url = model?.photo {
-            self.imageView.kf.setImage(with: URL(string: url))
-        } else {
-            self.imageView.image = Icons.launchPhoto.image
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

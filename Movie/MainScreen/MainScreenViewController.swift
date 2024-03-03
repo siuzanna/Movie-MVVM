@@ -8,132 +8,81 @@
 import UIKit
 import SnapKit
 
-class MainScreenViewController: UIViewController {
+enum Section: String, CaseIterable {
+    case topSlide = ""
+    case mostPopular = "Most Popular"
+    case comingSoon = "Coming Soon"
+    case lastUpdate = "Last Updated"
+    case bestSeries = "Best Series"
+}
+
+final class MainScreenViewController: UIViewController {
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MovieDTO>
     
-    enum Section: String, CaseIterable {
-        case topSlide = ""
-        case mostPopular = "Most Popular"
-        case comingSoon = "Coming Soon"
-        case lastUpdate = "Last Updated"
-        case bestSeries = "Best Series"
-    }
-    
-    enum Item: Hashable {
-        case topSlide(Movies)
-        case mostPopular(Movies)
-        case comingSoon(Movies)
-        case lastUpdate(Movies)
-        case bestSeries(Movies)
-    }
-    
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
-    private lazy var collectionView: UICollectionView = configureCollectionView()
-    private lazy var navigationBar = { NavigationBar() }()
-    private lazy var activityControl = UIActivityIndicatorView(style: .large)
     private var viewModel: MainScreenServiceProtocol
+    private lazy var contentView = Mainview()
     
     init(viewModel: MainScreenServiceProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = Colors.bg.color
-        activityControl.color = .white
-        setupViews()
-        setupResponses()
-        activityControl.startAnimating()
-        viewModel.requestMovies()
+    
+    override func loadView() {
+        view = contentView
     }
     
-    private func setupResponses() {
-        viewModel.successResponse = { [weak self] in
-            DispatchQueue.main.async {
-                self?.configureDataSource()
-                self?.setupCollectionViewConstraints()
-                self?.activityControl.stopAnimating()
-            }
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        contentView.collectionView.delegate = self
+        viewModel.delegate = self
         
-        viewModel.errorResponse = { [weak self] error in
-            DispatchQueue.main.async {
-                self?.showAlert(withTitle: "Error occurred", message: error)
-                self?.activityControl.stopAnimating()
-            }
-        }
+        contentView.activityControl.startAnimating()
+        viewModel.requestMovieList()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
-extension MainScreenViewController {
+extension MainScreenViewController: MainScreenViewModelDelegate {
     
-    // MARK: Configure UICollectionView
-    func configureCollectionView() -> UICollectionView {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: generateLayout())
-        view.addSubview(collectionView)
-        collectionView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        collectionView.delegate = self
-        collectionView.backgroundColor = .clear
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.contentInset.bottom = 20
-        collectionView.contentInset.top = 20
-        collectionView.register(cell: PhotoCell.self)
-        collectionView.register(cell: TopCell.self)
-        collectionView.register(header: HeaderView.self)
-        return collectionView
-    }
-
-    // MARK: Configure Constraints
-    private func setupViews() {
-        view.addSubview(navigationBar)
-        view.addSubview(activityControl)
-        navigationBar.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(92)
-        }
-    
-        activityControl.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+    func updateCollectionView() {
+        DispatchQueue.main.async {
+            self.configureDataSource()
+            self.contentView.activityControl.stopAnimating()
         }
     }
-
-    private func setupCollectionViewConstraints() {
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(85)
-            make.leading.trailing.bottom.equalToSuperview()
+    
+    func showError(text: String) {
+        DispatchQueue.main.async {
+            self.showAlert(withTitle: "Error occurred", message: text)
+            self.contentView.activityControl.stopAnimating()
         }
     }
 }
 
-// MARK: UICollectionViewDiffableDataSource
 extension MainScreenViewController {
     
     func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource
-        <Section, Item>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
-            switch item {
-            case .topSlide(let photo):
+        viewModel.dataSource = UICollectionViewDiffableDataSource<Section, MovieDTO>(collectionView: contentView.collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, item: MovieDTO) -> UICollectionViewCell? in
+            let sectionType = Section.allCases[indexPath.section]
+            switch sectionType {
+            case .topSlide:
                 let cell: TopCell = collectionView.dequeue(for: indexPath)
-                cell.configureCell(model: photo)
+                cell.configureCell(model: item)
                 return cell
-            case .mostPopular(let photo), .comingSoon(let photo), .lastUpdate(let photo), .bestSeries(let photo):
+            case .mostPopular, .comingSoon, .lastUpdate, .bestSeries:
                 let cell: PhotoCell = collectionView.dequeue(for: indexPath)
-                cell.configureCell(model: photo)
+                cell.configureCell(model: item)
                 return cell
             }
         }
         
-        dataSource.supplementaryViewProvider = {
+        viewModel.dataSource?.supplementaryViewProvider = {
             ( collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
+            
             let sectionType = Section.allCases[indexPath.section]
             switch sectionType {
             case .topSlide:
@@ -152,140 +101,26 @@ extension MainScreenViewController {
         }
         
         let snapshot = snapshot()
-        dataSource.apply(snapshot, animatingDifferences: true)
+        viewModel.dataSource?.apply(snapshot, animatingDifferences: true)
     }
     
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
         snapshot.appendSections([.topSlide, .mostPopular, .comingSoon, .lastUpdate, .bestSeries])
-        snapshot.appendItems(viewModel.topCellViewModel.map({ Item.topSlide($0) }), toSection: .topSlide)
-        snapshot.appendItems(viewModel.popularCellViewModel.map({ Item.mostPopular($0) }), toSection: .mostPopular)
-        snapshot.appendItems(viewModel.comingSoonCellViewModel.map({ Item.comingSoon($0) }).suffix(1), toSection: .comingSoon)
-        snapshot.appendItems(viewModel.lastUpdatedCellViewModel.map({ Item.lastUpdate($0) }), toSection: .lastUpdate)
-        snapshot.appendItems(viewModel.bestSeriesCellViewModel.map({ Item.bestSeries($0) }), toSection: .bestSeries)
+        snapshot.appendItems(viewModel.getMoviesBySection(.topSlide), toSection: .topSlide)
+        snapshot.appendItems(viewModel.getMoviesBySection(.mostPopular), toSection: .mostPopular)
+        snapshot.appendItems(viewModel.getMoviesBySection(.comingSoon).suffix(1), toSection: .comingSoon)
+        snapshot.appendItems(viewModel.getMoviesBySection(.lastUpdate), toSection: .lastUpdate)
+        snapshot.appendItems(viewModel.getMoviesBySection(.bestSeries), toSection: .bestSeries)
         return snapshot
     }
 }
 
 extension MainScreenViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let model: Movies
-        
-        switch Section.allCases[indexPath.section] {
-        case .topSlide:
-            model = viewModel.topCellViewModel[indexPath.row]
-        case .mostPopular:
-            model = viewModel.popularCellViewModel[indexPath.row]
-        case .comingSoon:
-            model = viewModel.comingSoonCellViewModel[indexPath.row]
-        case .lastUpdate:
-            model = viewModel.lastUpdatedCellViewModel[indexPath.row]
-        case .bestSeries:
-            model = viewModel.bestSeriesCellViewModel[indexPath.row]
-        }
+        let model: MovieDTO = viewModel.getMoviesBySection(indexPath.section)[indexPath.row]
         let viewController = MovieDetailedScreenViewController(viewModel: model)
         viewController.modalPresentationStyle = .overCurrentContext
         present(viewController, animated: true, completion: nil)
-    }
-}
-
-// MARK: UICollectionViewLayout
-extension MainScreenViewController {
-    
-    func generateLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout {
-            (sectionIndex: Int, _: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-            
-            let sectionLayoutKind = Section.allCases[sectionIndex]
-            switch sectionLayoutKind {
-            case .topSlide: return self.generateTopSlideLayout()
-            case .mostPopular: return self.generateCustomLayout()
-            case .comingSoon: return self.generateComingSoonLayout()
-            case .lastUpdate: return self.generateCustomLayout()
-            case .bestSeries: return self.generateCustomLayout()
-            }
-        }
-        return layout
-    }
-    
-    func generateTopSlideLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4)
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.78),
-            heightDimension: .fractionalWidth(0.576))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = UICollectionLayoutSectionOrthogonalScrollingBehavior.continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        section.orthogonalScrollingBehavior = .continuous
-        
-        return section
-    }
-    
-    func generateCustomLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4)
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.43),
-            heightDimension: .fractionalWidth(0.533))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 2, bottom: 0, trailing: 2)
-        
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(59))
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top)
-        sectionHeader.zIndex = 2
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = UICollectionLayoutSectionOrthogonalScrollingBehavior.continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        section.boundarySupplementaryItems = [sectionHeader]
-        section.orthogonalScrollingBehavior = .continuous
-        
-        return section
-    }
-    
-    func generateComingSoonLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .fractionalWidth(0.426))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
-        
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(59))
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top)
-        sectionHeader.zIndex = 2
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = UICollectionLayoutSectionOrthogonalScrollingBehavior.continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
-        section.boundarySupplementaryItems = [sectionHeader]
-        section.orthogonalScrollingBehavior = .none
-        
-        return section
     }
 }

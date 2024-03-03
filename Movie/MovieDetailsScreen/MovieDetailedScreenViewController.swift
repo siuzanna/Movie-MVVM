@@ -13,20 +13,15 @@ class MovieDetailedScreenViewController: UIViewController {
         case comments = "Comments"
         case recommend = ""
     }
-    
-    enum Item: Hashable {
-        case comments(Comments)
-        case recommend(Comments)
-    }
-    
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>! = nil
-    private var viewModel: Movies
+     
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Comments>
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Comments>! = nil
+    private var viewModel: MovieDTO
 
     private lazy var navigationBar = NavigationBarBack()
     private lazy var collectionView = configureCollectionView()
     
-    init(viewModel: Movies) {
+    init(viewModel: MovieDTO) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -91,15 +86,16 @@ extension MovieDetailedScreenViewController {
     
     func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource
-        <Section, Item>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell? in
-            switch item {
-            case .comments(let comments):
-                print(comments)
+        <Section, Comments>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, item: Comments) -> UICollectionViewCell? in
+        
+            let sectionType = Section.allCases[indexPath.section]
+            switch sectionType {
+            case .comments:
                 return  UICollectionViewCell()
-            case .recommend(let photo):
+            case .recommend:
                 let cell: CommentsCell = collectionView.dequeue(for: indexPath)
-                cell.cellViewModel = photo
+                cell.cellViewModel = item
                 return cell
             }
         }
@@ -126,8 +122,8 @@ extension MovieDetailedScreenViewController {
         var snapshot = Snapshot()
         snapshot.appendSections([.comments, .recommend])
         let comments = viewModel.comments
-        snapshot.appendItems(comments.map({ Item.recommend($0) }), toSection: .recommend)
-        snapshot.appendItems(comments.map({ Item.comments($0) }).suffix(0), toSection: .comments)
+        snapshot.appendItems(comments, toSection: .recommend)
+        snapshot.appendItems(comments.suffix(0), toSection: .comments)
         
         return snapshot
     }

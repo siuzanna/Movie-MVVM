@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class PhotoCell: UICollectionViewCell {
+final class PhotoCell: UICollectionViewCell {
     
     private lazy var imageView: UIImageView = {
         let image = UIImageView()
@@ -24,9 +24,13 @@ class PhotoCell: UICollectionViewCell {
         super.init(frame: frame)
         configure()
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
+    public func configureCell(model: MovieDTO?) {
+        if let url = model?.miniPhoto {
+            self.imageView.kf.setImage(with: URL(string: url))
+        } else {
+            self.imageView.image = Icons.launchPhoto.image
+        }
     }
     
     private func configure() {
@@ -36,11 +40,7 @@ class PhotoCell: UICollectionViewCell {
         }
     }
     
-    func configureCell(model: Movies?) {
-        if let url = model?.miniPhoto {
-            self.imageView.kf.setImage(with: URL(string: url))
-        } else {
-            self.imageView.image = Icons.launchPhoto.image
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
