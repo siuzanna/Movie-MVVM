@@ -37,7 +37,10 @@ final class MainScreenViewController: UIViewController {
         viewModel.delegate = self
         
         contentView.activityControl.startAnimating()
-        viewModel.requestMovieList()
+        configureDataSource()
+        DispatchQueue.global().async {
+            self.viewModel.requestMovieList()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -49,7 +52,8 @@ extension MainScreenViewController: MainScreenViewModelDelegate {
     
     func updateCollectionView() {
         DispatchQueue.main.async {
-            self.configureDataSource()
+            let snapshot = self.snapshot()
+            self.viewModel.dataSource?.apply(snapshot, animatingDifferences: true)
             self.contentView.activityControl.stopAnimating()
         }
     }
@@ -106,12 +110,21 @@ extension MainScreenViewController {
     
     func snapshot() -> Snapshot {
         var snapshot = Snapshot()
-        snapshot.appendSections([.topSlide, .mostPopular, .comingSoon, .lastUpdate, .bestSeries])
-        snapshot.appendItems(viewModel.getMoviesBySection(.topSlide), toSection: .topSlide)
-        snapshot.appendItems(viewModel.getMoviesBySection(.mostPopular), toSection: .mostPopular)
-        snapshot.appendItems(viewModel.getMoviesBySection(.comingSoon).suffix(1), toSection: .comingSoon)
-        snapshot.appendItems(viewModel.getMoviesBySection(.lastUpdate), toSection: .lastUpdate)
-        snapshot.appendItems(viewModel.getMoviesBySection(.bestSeries), toSection: .bestSeries)
+
+        let sections: [Section] = [.topSlide, .mostPopular, .comingSoon, .lastUpdate, .bestSeries]
+
+        for section in sections {
+            let items = viewModel.getMoviesBySection(section)
+            if !items.isEmpty {
+                snapshot.appendSections([section])
+                if section == .comingSoon {
+                    snapshot.appendItems(items.suffix(1), toSection: section)
+                } else {
+                    snapshot.appendItems(items, toSection: section)
+                }
+            }
+        }
+
         return snapshot
     }
 }
