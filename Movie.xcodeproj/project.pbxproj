@@ -45,9 +45,24 @@
 		964938D5276CB7D1009C6708 /* UIImage + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964938D4276CB7D1009C6708 /* UIImage + Extension.swift */; };
 		964938D8276CBEA4009C6708 /* GeneratedColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964938D6276CBEA4009C6708 /* GeneratedColors.swift */; };
 		964938D9276CBEA4009C6708 /* GeneratedIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964938D7276CBEA4009C6708 /* GeneratedIcons.swift */; };
+		967792682CAEDCCC0031C2F3 /* SnapKit-Dynamic in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 96AADD912B47481100D823D6 /* SnapKit-Dynamic */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		96AADD922B47481100D823D6 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 96AADD912B47481100D823D6 /* SnapKit-Dynamic */; };
 		96F59F612B41D1BA004C298A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 96F59F602B41D1BA004C298A /* Kingfisher */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		967792692CAEDCCC0031C2F3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				967792682CAEDCCC0031C2F3 /* SnapKit-Dynamic in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		94D69698E83CFDFC9C1B27BC /* Pods_Movie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Movie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -300,6 +315,7 @@
 				964938A5276CA661009C6708 /* Sources */,
 				964938A6276CA661009C6708 /* Frameworks */,
 				964938A7276CA661009C6708 /* Resources */,
+				967792692CAEDCCC0031C2F3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
