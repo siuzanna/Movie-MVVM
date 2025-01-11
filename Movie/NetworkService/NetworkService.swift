@@ -30,6 +30,8 @@ class NetworkService {
                 } else if case NetworkErrors.badRequest = error {
                     if let model = self.transformFromJSON(data: data, objectType: FailureModel.self) {
                         completion(.badRequest(model))
+                    } else {
+                        completion(.failure("Check you JSON MODEL"))
                     }
                 } else {
                     completion(.failure("Check you JSON MODEL"))
