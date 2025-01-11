@@ -1,0 +1,15 @@
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore build products
+/build/
+*.xcarchive
+
+# Ignore Pods folder (for iOS projects using CocoaPods)
+/Pods/
+
+# Ignore personal Xcode user data
+*.xcuserdatad/
+*.xcuserstate
+Movie.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved

@@ -135,7 +135,7 @@ final class TopView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var cellViewModel: Movies? {
+    var cellViewModel: MovieDTO? {
         didSet {
             if let url = cellViewModel?.photo {
                 self.imageView.kf.setImage(with: URL(string: url))

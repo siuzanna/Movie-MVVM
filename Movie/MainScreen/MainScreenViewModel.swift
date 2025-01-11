@@ -6,78 +6,97 @@
 //
 
 import Foundation
+import UIKit.NSDiffableDataSourceSectionSnapshot
 
-protocol MainScreenServiceProtocol {
-    var successResponse: (() -> Void)? { get set }
-    var errorResponse: ((String) -> Void)? { get set }
-    
-    var menuCellViewModel: [Movies] { get set }
-    var topCellViewModel: [Movies] { get set }
-    var popularCellViewModel: [Movies] { get set }
-    var comingSoonCellViewModel: [Movies] { get set }
-    var lastUpdatedCellViewModel: [Movies] { get set }
-    var bestSeriesCellViewModel: [Movies] { get set }
-    
-    func requestMovies()
+protocol MainScreenViewModelDelegate: AnyObject {
+    func updateCollectionView()
+    func showError(text: String)
 }
 
-class MainScreenViewModel: MainScreenServiceProtocol {
-    let networkService: NetworkService = NetworkService()
+protocol MainScreenServiceProtocol {
+    var delegate: MainScreenViewModelDelegate? { get set }
+    var dataSource: UICollectionViewDiffableDataSource<Section, MovieDTO>? { get set }
     
-    var successResponse: (() -> Void)?
-    var errorResponse: ((String) -> Void)?
+    func requestMovieList()
+    func getMoviesBySection(_ indexPath: Int) -> [MovieDTO]
+    func getMoviesBySection(_ section: Section) -> [MovieDTO]
+}
+
+final class MainScreenViewModel: MainScreenServiceProtocol {
     
-    var menuCellViewModel = [Movies]()
-    var topCellViewModel = [Movies]()
-    var popularCellViewModel = [Movies]()
-    var comingSoonCellViewModel = [Movies]()
-    var lastUpdatedCellViewModel = [Movies]()
-    var bestSeriesCellViewModel = [Movies]()
+    private let networkService: NetworkService
+    private var movieList: [MovieDTO]
     
-    func getByIndexPath(_ indexPath: IndexPath) -> Movies {
-        return menuCellViewModel[indexPath.row]
+    public var dataSource: UICollectionViewDiffableDataSource<Section, MovieDTO>? = nil
+    weak var delegate: MainScreenViewModelDelegate?
+    
+    init(networkService: NetworkService = NetworkService()) {
+        self.networkService = networkService
+        self.movieList = []
+    }
+}
+
+extension MainScreenViewModel {
+    
+    func getByIndexPath(_ indexPath: IndexPath) -> MovieDTO {
+        return movieList[indexPath.row]
     }
     
-    func requestMovies() {
-        self.requestItems { model, error in
-            if  let movies = model {
-                for movie in movies {
-                    if movie.type == 0 {
-                        self.topCellViewModel.append(movie)
-                    } else if movie.type == 1 {
-                        self.popularCellViewModel.append(movie)
-                    } else if movie.type == 2 {
-                        self.comingSoonCellViewModel.append(movie)
-                    } else if movie.type == 3 {
-                        self.lastUpdatedCellViewModel.append(movie)
-                    } else if movie.type == 4 {
-                        self.bestSeriesCellViewModel.append(movie)
-                    }
-                }
-                self.menuCellViewModel = movies
-                self.successResponse?()
-            } else {
-                self.errorResponse?(error ?? "Произошла ошибка")
+    func requestMovieList() {
+        networkService.sendRequest(
+            urlRequest: MainScreenRouter.getAllPosts.createURLRequest(),
+            successModel: [MovieDTO].self
+        ) { [weak self] (result) in
+            guard let self else { return }
+            switch result {
+            case .success(let model):
+                self.movieList = model
+                self.delegate?.updateCollectionView()
+            case .badRequest(let error):
+                self.delegate?.showError(text: error.errors?.first ?? "Error occurred")
+                debugPrint(#function, error)
+                self.fetchLocalJsonMovies()
+            case .failure(let error):
+                self.delegate?.showError(text: error)
+                debugPrint(#function, error)
+                self.fetchLocalJsonMovies()
             }
         }
     }
+
+    private func fetchLocalJsonMovies() {
+        guard let path = Bundle.main.path(forResource: "movies", ofType: "json") else {
+            debugPrint("Local JSON file 'move.json' not found.")
+            return
+        }
+
+        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: path))
+            let localMovies = try JSONDecoder().decode([MovieDTO].self, from: data)
+            self.movieList = localMovies
+            self.delegate?.updateCollectionView()
+        } catch {
+            debugPrint("Error decoding local JSON file: \(error)")
+            self.delegate?.showError(text: "Failed to load data from the local file")
+        }
+    }
+
+    func getMoviesBySection(_ indexPath: Int) -> [MovieDTO] {
+        return movieList.filter { $0.type == indexPath }
+    }
     
-    func requestItems(completion: @escaping ([Movies]?, String?) -> Void) {
-        networkService.sendRequest(
-            urlRequest: MainScreenRouter.getAllPosts.createURLRequest(),
-            successModel: [Movies].self
-        ) { [weak self] (result) in
-            guard self != nil else {return}
-            switch result {
-            case .success(let model):
-                completion(model, nil)
-            case .badRequest(let error):
-                completion(nil, error.errors?.first)
-                debugPrint(#function, error)
-            case .failure(let error):
-                completion(nil, error)
-                debugPrint(#function, error)
-            }
+    func getMoviesBySection(_ section: Section) -> [MovieDTO] {
+        switch section {
+        case .topSlide:
+            getMoviesBySection(0)
+        case .mostPopular:
+            getMoviesBySection(1)
+        case .comingSoon:
+            getMoviesBySection(2)
+        case .lastUpdate:
+            getMoviesBySection(3)
+        case .bestSeries:
+            getMoviesBySection(4)
         }
     }
 }

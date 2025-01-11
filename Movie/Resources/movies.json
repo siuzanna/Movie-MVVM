@@ -1,0 +1,310 @@
+[
+    {
+        "id": 101,
+        "type": 0,
+        "series": false,
+        "name": "Money Heist",
+        "time": 120,
+        "genre": ["Crime", "Drama"],
+        "rating": "8.2",
+        "votes": "529K",
+        "photo": "https://i.pinimg.com/originals/cc/3d/c2/cc3dc28c61ecc4e3943ef52a5be72415.jpg",
+        "miniPhoto": "https://i.pinimg.com/originals/9b/3f/ed/9b3fedaf0922a2538fc8083bbfcb3d2f.jpg",
+        "description": "An unusual group of robbers attempt to carry out the most perfect robbery in Spanish history - stealing 2.4 billion euros from the Royal Mint of Spain.",
+        "trailer": "https://www.youtube.com/watch?v=_InqQJRqGW4",
+        "comments": [
+            {
+                "id": 1,
+                "name": "John Doe",
+                "comment": "Great series!",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Jane Smith",
+                "comment": "Loved the storyline.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 102,
+        "type": 0,
+        "series": false,
+        "name": "The Avengers",
+        "time": 143,
+        "genre": ["Action", "Adventure"],
+        "rating": "8.0",
+        "votes": "1.5M",
+        "photo": "https://avatars.mds.yandex.net/i?id=9dd4bdd1197e4c470546f18681d944c6c7da6fdf-10555250-images-thumbs&n=13",
+        "miniPhoto": "http://images6.fanpop.com/image/photos/37300000/Avengers-2-Age-of-Ultron-the-avengers-37328228-900-1185.jpg",
+        "description": "Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop the mischievous Loki and his alien army.",
+        "trailer": "https://www.youtube.com/watch?v=6ZfuNTqbHE8",
+        "comments": [
+            {
+                "id": 1,
+                "name": "John Doe",
+                "comment": "Great movie!",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Jane Smith",
+                "comment": "Loved the action scenes.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 201,
+        "type": 0,
+        "series": false,
+        "name": "Fatman",
+        "time": 100,
+        "genre": ["Action", "Comedy", "Fantasy"],
+        "rating": "5.9",
+        "votes": "30K",
+        "photo": "https://avatars.dzeninfra.ru/get-zen_doc/3385233/pub_602e2d835f462a3bfd27a7f2_602e2e30ffa2d86ae404fe1c/scale_1200",
+        "miniPhoto": "https://i.pinimg.com/originals/13/97/ae/1397ae69601ebc7e76e73f643f8a9114.jpg",
+        "description": "A rowdy, unorthodox Santa Claus is fighting to save his declining business. Meanwhile, Billy, a neglected and precocious 12-year-old, hires a hitman to kill Santa after receiving a lump of coal in his stocking.",
+        "trailer": "url_to_trailer",
+        "comments": [
+            {
+                "id": 1,
+                "name": "John Doe",
+                "comment": "An unconventional holiday film.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Jane Smith",
+                "comment": "Unique take on Santa Claus.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 202,
+        "type": 1,
+        "series": true,
+        "name": "30 Coins",
+        "time": 60,
+        "genre": ["Drama", "Fantasy", "Horror"],
+        "rating": "7.1",
+        "votes": "11K",
+        "photo": "https://pogd.es/assets/bg/30-Coins.jpg",
+        "miniPhoto": "https://i.pinimg.com/originals/3e/78/65/3e7865c4646ece782f1d6d1c3971225f.jpg",
+        "description": "An exiled priest tries to escape his demons while living in a remote village in Spain.",
+        "trailer": "https://www.youtube.com/watch?v=jOAxchyLZ00",
+        "comments": [
+            {
+                "id": 1,
+                "name": "John Doe",
+                "comment": "Intriguing and suspenseful.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Jane Smith",
+                "comment": "Captivating storyline.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 301,
+        "type": 1,
+        "series": false,
+        "name": "Inception",
+        "time": 148,
+        "genre": ["Action", "Sci-Fi", "Thriller"],
+        "rating": "8.8",
+        "votes": "2.3M",
+        "photo": "https://m.media-amazon.com/images/I/51zUbui+gbL._AC_.jpg",
+        "miniPhoto": "https://m.media-amazon.com/images/I/51zUbui+gbL._AC_SY679_.jpg",
+        "description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+        "trailer": "https://www.youtube.com/watch?v=YoHD9XEInc0",
+        "comments": [
+            {
+                "id": 1,
+                "name": "Alice Johnson",
+                "comment": "Mind-bending masterpiece!",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Bob Lee",
+                "comment": "A complex and thrilling experience.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 302,
+        "type": 1,
+        "series": false,
+        "name": "The Grand Budapest Hotel",
+        "time": 99,
+        "genre": ["Adventure", "Comedy", "Drama"],
+        "rating": "8.1",
+        "votes": "800K",
+        "photo": "https://static01.nyt.com/images/2014/03/05/multimedia/budapest-anatomy/budapest-anatomy-superJumbo.jpg",
+        "miniPhoto": "https://m.media-amazon.com/images/M/MV5BOTVjOGNhMmUtMDMzOS00YTljLWEwYWUtNWZjMTgwZmZkNTI0XkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg",
+        "description": "A writer encounters the owner of an aging high-class hotel, who tells him of his early years serving as a lobby boy in the hotel's glorious years under an exceptional concierge.",
+        "trailer": "https://www.youtube.com/watch?v=1Fg5iWmQjwk",
+        "comments": [
+            {
+                "id": 1,
+                "name": "Clara Smith",
+                "comment": "A whimsical and visually stunning film.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "David Brown",
+                "comment": "Wes Anderson at his best.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 303,
+        "type": 2,
+        "series": false,
+        "name": "Parasite",
+        "time": 132,
+        "genre": ["Comedy", "Drama", "Thriller"],
+        "rating": "8.6",
+        "votes": "1.1M",
+        "photo": "https://static.kinoafisha.info/upload/news/391683356050.jpg",
+        "miniPhoto": "https://m.media-amazon.com/images/M/MV5BYjU3MTEzNGItMDhkOS00YTgyLWIzZGQtMjQ0ZjdiYjE1YmM5XkEyXkFqcGdeQXVyMTA4NjE0NjEy._V1_.jpg",
+        "description": "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+        "trailer": "https://www.youtube.com/watch?v=5xH0HfJHsaY",
+        "comments": [
+            {
+                "id": 1,
+                "name": "Eva Green",
+                "comment": "A brilliant social commentary.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Frank White",
+                "comment": "Unpredictable and captivating.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 304,
+        "type": 3,
+        "series": false,
+        "name": "The Dark Knight",
+        "time": 152,
+        "genre": ["Action", "Crime", "Drama"],
+        "rating": "9.0",
+        "votes": "2.5M",
+        "photo": "https://a.d-cd.net/d4AAAgNbKuA-1920.jpg",
+        "miniPhoto": "https://images-na.ssl-images-amazon.com/images/I/91ebheNmoUL._RI_.jpg",
+        "description": "When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.",
+        "trailer": "https://www.youtube.com/watch?v=EXeTwQWrcwY",
+        "comments": [
+            {
+                "id": 1,
+                "name": "George Miller",
+                "comment": "Heath Ledger's performance is legendary.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Hannah Davis",
+                "comment": "A masterpiece in the superhero genre.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 305,
+        "type": 4,
+        "series": false,
+        "name": "Pulp Fiction",
+        "time": 154,
+        "genre": ["Crime", "Drama"],
+        "rating": "8.9",
+        "votes": "1.9M",
+        "photo": "https://m.media-amazon.com/images/I/71c05lTE03L._AC_SY679_.jpg",
+        "miniPhoto": "https://m.media-amazon.com/images/I/71c05lTE03L._AC_SY679_.jpg",
+        "description": "The lives of two mob hitmen, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
+        "trailer": "https://www.youtube.com/watch?v=s7EdQ4FqbhY",
+        "comments": [
+            {
+                "id": 1,
+                "name": "Ian Thompson",
+                "comment": "Quentin Tarantino's magnum opus.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Julia Roberts",
+                "comment": "A cult classic with unforgettable dialogue.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 403,
+        "type": 3,
+        "series": false,
+        "name": "The Conjuring",
+        "time": 112,
+        "genre": ["Horror", "Mystery", "Thriller"],
+        "rating": "7.5",
+        "votes": "528K",
+        "photo": "https://newcdn.igromania.ru/mnt/news/e/9/e/a/2/2/99139/html/more/fded9944f363f333733fcc3b_1920xH.webp",
+        "miniPhoto": "https://m.media-amazon.com/images/M/MV5BZTlhZWY0YzAtMDA2Zi00NGVlLThhNzQtYjFjMWI0YjU0Yzg0XkEyXkFqcGdeQXVyNjIzNzM4NzA@._V1_.jpg",
+        "description": "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse.",
+        "trailer": "https://www.youtube.com/watch?v=k10ETZ41q5o",
+        "comments": [
+            {
+                "id": 1,
+                "name": "Nathan Brooks",
+                "comment": "Terrifying and unforgettable.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Olivia Parker",
+                "comment": "A hauntingly good time.",
+                "picture": "url_to_picture"
+            }
+        ]
+    },
+    {
+        "id": 404,
+        "type": 4,
+        "series": true,
+        "name": "Game of Thrones",
+        "time": 57,
+        "genre": ["Fantasy", "Adventure", "Drama"],
+        "rating": "9.2",
+        "votes": "2.0M",
+        "photo": "https://avatars.mds.yandex.net/get-marketpic/5654221/pic9f3d3ef1bac6f563bcd9f9b17ece84ef/orig",
+        "miniPhoto": "https://avatars.mds.yandex.net/get-marketpic/5888040/picebb756d60998254792428e8d566183fe/orig",
+        "description": "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.",
+        "trailer": "https://www.youtube.com/watch?v=BpJYNVhGf1s",
+        "comments": [
+            {
+                "id": 1,
+                "name": "Henry Evans",
+                "comment": "Epic storytelling with rich world-building.",
+                "picture": "url_to_picture"
+            },
+            {
+                "id": 2,
+                "name": "Isabella Garcia",
+                "comment": "A must-watch for fantasy fans.",
+                "picture": "url_to_picture"
+            }
+        ]
+    }
+]

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Movies: Codable, Hashable {
+struct MovieDTO: Codable, Hashable {
     let id: Int
     let type: Int
     let series: Bool
