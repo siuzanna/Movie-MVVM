@@ -26,14 +26,15 @@ final class PhotoCell: UICollectionViewCell {
         configure()
     }
 
-    public func configureCell(model: MovieDTO?) {
-        if let url = model?.miniPhoto {
-            self.imageView.kf.setImage(with: URL(string: url))
+    public func configureCell(model: MovieDTO?, invertImage: Bool = false) {
+        let urlString = invertImage ? model?.photo : model?.miniPhoto
+        if let url = urlString, let finalURL = URL(string: url) {
+            imageView.kf.setImage(with: finalURL)
         } else {
-            self.imageView.image = Icons.launchPhoto.image
+            imageView.image = Icons.launchPhoto.image
         }
     }
-    
+
     private func configure() {
         contentView.addSubview(imageView)
         imageView.snp.makeConstraints { make in

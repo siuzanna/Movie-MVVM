@@ -66,8 +66,6 @@ extension Mainview {
         collectionView.contentInset.bottom = 20
         collectionView.contentInset.top = 20
         collectionView.register(cell: PhotoCell.self)
-        collectionView.register(cell: TopCell.self)
-        collectionView.register(cell: ComingSoonCell.self)
         collectionView.register(header: HeaderView.self)
         return collectionView
     }

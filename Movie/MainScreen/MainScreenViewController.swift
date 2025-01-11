@@ -72,22 +72,16 @@ extension MainScreenViewController {
         viewModel.dataSource = UICollectionViewDiffableDataSource<Section, MovieDTO>(collectionView: contentView.collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, item: MovieDTO) -> UICollectionViewCell? in
             let sectionType = Section.allCases[indexPath.section]
+            let cell: PhotoCell = collectionView.dequeue(for: indexPath)
             switch sectionType {
-            case .topSlide:
-                let cell: TopCell = collectionView.dequeue(for: indexPath)
-                cell.configureCell(model: item)
-                return cell
+            case .topSlide, .comingSoon:
+                cell.configureCell(model: item, invertImage: true)
             case .mostPopular, .lastUpdate, .bestSeries:
-                let cell: PhotoCell = collectionView.dequeue(for: indexPath)
                 cell.configureCell(model: item)
-                return cell
-            case .comingSoon:
-                let cell: ComingSoonCell = collectionView.dequeue(for: indexPath)
-                cell.configureCell(model: item)
-                return cell
             }
+            return cell
         }
-        
+
         viewModel.dataSource?.supplementaryViewProvider = {
             ( collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView? in
             
