@@ -17,6 +17,7 @@ final class PhotoCell: UICollectionViewCell {
         image.clipsToBounds = true
         image.layer.cornerRadius = 15
         image.contentMode = .scaleAspectFill
+        image.backgroundColor = Colors.commentsView.color
         return image
     }()
     

@@ -77,8 +77,12 @@ extension MainScreenViewController {
                 let cell: TopCell = collectionView.dequeue(for: indexPath)
                 cell.configureCell(model: item)
                 return cell
-            case .mostPopular, .comingSoon, .lastUpdate, .bestSeries:
+            case .mostPopular, .lastUpdate, .bestSeries:
                 let cell: PhotoCell = collectionView.dequeue(for: indexPath)
+                cell.configureCell(model: item)
+                return cell
+            case .comingSoon:
+                let cell: ComingSoonCell = collectionView.dequeue(for: indexPath)
                 cell.configureCell(model: item)
                 return cell
             }

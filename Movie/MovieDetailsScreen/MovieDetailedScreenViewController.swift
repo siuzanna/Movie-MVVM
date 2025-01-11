@@ -34,7 +34,7 @@ class MovieDetailedScreenViewController: UIViewController {
         configureDataSource()
         setupNavigationBar()
     }
-    
+
     @objc func dismissView() {
         self.dismiss(animated: true, completion: nil)
     }

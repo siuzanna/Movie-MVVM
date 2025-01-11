@@ -1,16 +1,16 @@
 //
-//  TopCell.swift
+//  ComingSoonCell.swift
 //  Movie
 //
-//  Created by siuzanna on 18/12/21.
+//  Created by Siuzanna Karagulova   on 11/1/25.
 //
 
 import UIKit
 import SnapKit
 import Kingfisher
 
-final class TopCell: UICollectionViewCell {
-    
+final class ComingSoonCell: UICollectionViewCell {
+
     private lazy var imageView: UIImageView = {
         let image = UIImageView()
         image.layer.masksToBounds = true
@@ -20,12 +20,17 @@ final class TopCell: UICollectionViewCell {
         image.backgroundColor = Colors.commentsView.color
         return image
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
     }
-     
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+    }
+
     public func configureCell(model: MovieDTO?) {
         if let url = model?.photo {
             self.imageView.kf.setImage(with: URL(string: url))
@@ -40,7 +45,7 @@ final class TopCell: UICollectionViewCell {
             make.edges.equalToSuperview()
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
